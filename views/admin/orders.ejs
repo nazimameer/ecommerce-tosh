@@ -1,0 +1,259 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body style="background: #000025">
+    <%- include('../partials/adminheader.ejs') %>
+
+
+        <section class="h-100 h-custom" style="background-color: #000025;">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center  h-100" style="position: sticky;">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="row">
+                                    <h5 class="mb-3" style=" font-family: 'Poppins', sans-serif; font-weight: 700;"><a
+                                            href="/admin/orders" class="text-body"
+                                            style="text-decoration: none; margin-left: 10px;"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24"
+                                                style="fill: rgba(0, 0, 0, 1);transform: ; msFilter:; margin-right: 10px; margin-bottom: 5px;">
+                                                <path
+                                                    d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z">
+                                                </path>
+                                            </svg>Back to Home</a></h5>
+                                    <hr>
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div>
+                                            <p class="mb-1" style="font-size: 150%;">Order Details</p>
+                                            <p class="mb-0">Track Your Order</p>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0"><span class="text-muted"></span> </p>
+                                        </div>
+                                    </div>
+
+                                    <% let count=1; %>
+                                        <% orders.forEach((order)=>{%>
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div
+                                                        class="d-flex flex-row align-items-center justify-content-between">
+                                                        <div>
+                                                            <%= count %>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <%if(order.status=='Cancelled'){%>
+                                                                <h5
+                                                                    style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 500; margin: 0;">
+                                                                    🔴Cancelled
+                                                                </h5>
+                                                                <p class="small mb-0" style="font-size: 70%;">
+                                                                </p>
+                                                                <%}else{%>
+                                                                    <h5
+                                                                        style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 500; margin: 0;">
+                                                                        🟢<%=order.orderstatus%>
+                                                                    </h5>
+                                                                    <p class="small mb-0" style="font-size: 70%;">
+                                                                    </p>
+                                                                    <%}%>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <h5
+                                                                style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700; margin: 0;">
+                                                                ₹ <%= order.total%>.00</h5>
+                                                            <p class="small mb-0">
+                                                                <!-- category -->
+                                                            </p>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <%if(order.paymentMethod=='onlinepayment'){%>
+                                                                <h5
+                                                                    style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin: 0;">
+                                                                    PAID</h5>
+                                                                <p class="small mb-0" style="font-size: 70%;">
+                                                                    ID:<%= order._id%>
+                                                                </p>
+                                                                <%}else{%>
+                                                                    <h5
+                                                                        style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin: 0;">
+                                                                        Cash on delivery</h5>
+                                                                    <p class="small mb-0" style="font-size: 70%;">
+                                                                        ID:<%= order._id%>
+                                                                    </p>
+                                                                    <%}%>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <h5
+                                                                style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                <span style="font-size: 10px; font-weight: 300;">Exp
+                                                                    Date: </span>
+                                                                <%=order.date.getDate()+7%> -
+                                                                    <%=order.date.getMonth()+1%> -
+                                                                        <%=order.date.getFullYear()%>
+                                                            </h5>
+                                                            <p class="small mb-0" style="font-size: 70%;">
+                                                                Ordered Date: <span style="font-weight: 500;">
+                                                                    <%=order.date.toDateString()%>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <div
+                                                                style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                <a href="/admin/orderedpro/<%=order._id%>"><svg
+                                                                        xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24"
+                                                                        style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;">
+                                                                        <path
+                                                                            d="M19 10H5c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2zM5 20v-8h14l.002 8H5zM5 6h14v2H5zm2-4h10v2H7z">
+                                                                        </path>
+                                                                    </svg></a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <%if(order.orderstatus=='Placed'){%>
+                                                                <h5
+                                                                
+                                                                style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                <button style="background: none; border: none;"
+                                                                onclick="confirmstatus('<%=order._id%>')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="m10.933 13.519-2.226-2.226-1.414 1.414 3.774 3.774 5.702-6.84-1.538-1.282z"></path><path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zM5 19V5h14l.002 14H5z"></path></svg></button>
+                                                            </h5>
+                                                            <%}%> 
+                                                            <%if(order.orderstatus=='Confirmed'){%>
+                                                                <h5
+                                                                style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                <button style="background: none; border: none;"
+                                                                    onclick="shippedstatus('<%=order._id%>')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M19.15 8a2 2 0 0 0-1.72-1H15V5a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 1 1.73 3.49 3.49 0 0 0 7 .27h3.1a3.48 3.48 0 0 0 6.9 0 2 2 0 0 0 2-2v-3a1.07 1.07 0 0 0-.14-.52zM15 9h2.43l1.8 3H15zM6.5 19A1.5 1.5 0 1 1 8 17.5 1.5 1.5 0 0 1 6.5 19zm10 0a1.5 1.5 0 1 1 1.5-1.5 1.5 1.5 0 0 1-1.5 1.5z"></path></svg></button>
+                                                            </h5>
+                                                                <%}%>
+                                                                <%if(order.orderstatus=='Shipped'){%>
+                                                                    <h5
+                                                                    style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                    <button style="background: none; border: none;"
+                                                                        onclick="deliveredstatus('<%=order._id%>')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg></button>
+                                                                </h5>
+                                                                    <%}%>
+                                                                    <%if(order.orderstatus=='Delivered'){%>
+                                                                        <h5
+                                                                        style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(4, 234, 255);transform: ;msFilter:;"><path d="m2.394 13.742 4.743 3.62 7.616-8.704-1.506-1.316-6.384 7.296-3.257-2.486zm19.359-5.084-1.506-1.316-6.369 7.279-.753-.602-1.25 1.562 2.247 1.798z"></path></svg>
+                                                                    </h5>
+                                                                        <%}%>
+                                                        </div>
+                                                        <div class="ms-3 ">
+                                                            <h5
+                                                                style="font-size: 14px; font-family: 'Poppins', sans-serif; font-weight: 700; margin:0;">
+                                                                <button style="background: none; border: none;"
+                                                                    onclick="cancelOrder('<%=order._id%>')"><svg
+                                                                        xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                        height="24" viewBox="0 0 24 24"
+                                                                        style="fill: rgb(0, 0, 0);transform: ;msFilter:;">
+                                                                        <path
+                                                                            d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z">
+                                                                        </path>
+                                                                    </svg></button>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% count++; %>
+                                                <% })%>
+                                                    <hr class="my-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/b3e88707b5.js" crossorigin="anonymous"></script>
+
+        <script>
+            function cancelOrder(orderId){
+        $.ajax({
+            url:'/cancelOrder',
+            data:{
+                orderId: orderId,
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    location.reload(); 
+                }
+            },
+        })
+   }
+   function confirmstatus(orderId){
+        $.ajax({
+            url:'/admin/confirmstatus',
+            data:{
+                orderId:orderId,
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    swal("Good job!", "Order Confirmed Successfully!", "success").then(()=>{
+
+                        location.reload()
+                    })
+                }
+            }
+        })
+   }
+   function shippedstatus(orderId){
+        $.ajax({
+            url:'/admin/shippedstatus',
+            data:{
+                orderId:orderId,
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    swal("Good job!", "Order Shipped Successfully!", "success").then(()=>{
+                        location.reload()
+                    })
+                }
+            }
+        })
+   }
+   function deliveredstatus(orderId){
+        $.ajax({
+            url:'/admin/deliveredstatus',
+            data:{
+                orderId:orderId,
+            },
+            method:'post',
+            success:(response)=>{
+                if(response.status){
+                    swal("Good job!", "Order Delivered Successfully!", "success").then(()=>{
+                        location.reload()
+                    })
+                }
+            }
+        })
+   }
+
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<% if(user==true){%>
+
+  <%- include('../partials/userheader.ejs') %>
+
+    <%}else{%>
+
+      <%- include('../partials/guestheader.ejs') %>
+
+        <%}%>
+
+          <head>
+            <link rel="stylesheet" href="/usercss/homepage.css">
+          </head>
+
+          <body style="background: #000025">
+
+
+            <div class="container mt-3 mb-3">
+
+
+
+              <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+                </div>
+                <% banners.forEach((banner)=>{%>
+
+                  <div class="carousel-inner" style="border-radius: 10px;">
+                    <div class="carousel-item active">
+                      <img src="/BannerImg/<%=banner._id%>.jpg" class="d-block w-100" alt="...">
+                      <div class="carousel-caption">
+                        <h5>
+                          <%=banner.text%>
+                        </h5>
+                      </div>
+                    </div>
+                    <%})%>
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+              </div>
+
+
+
+            </div>
+
+            <h1 class="text-light text decoration" style="padding-left:7%; font-size: 30px; margin-top: 2%;">Categories</h1>
+
+            <div class="d-flex justify-content-center col-md-12">
+              <div class="row justify-content-center mt-4 mb-5">
+                <% cats.forEach((cat)=>{ %>
+
+                  <div class="card mx-1 my-2 align-items-center" style="width: 11.5rem; border-radius: 1rem">
+                    <div style="align-items: center; justify-content: center;" class="px-1">
+                      <a href=""><img src="/CategoryImg/<%=cat._id%>.jpg" class="card-img-top" alt="..."
+                          style="width: 11.5rem; height: 10rem; border-radius: 1.25rem;" /></a>
+                    </div>
+                    <div class="card-body align-items-center justify-content-center" style="padding: 0;">
+                      <h5 class="card-title mb-1"
+                        style="font-size: 15px; margin-bottom: 3px; margin-top: 3px; font-weight: 700;align-items: center; color: #424246;">
+                        <%= cat.name %>
+                      </h5>
+                    </div>
+                  </div>
+                  <% })%>
+              </div>
+            </div>
+
+            <h1 class="text-light text-decoration" style="padding-left: 7%; font-size: 30px;">Featured Products</h1>
+
+            <div class="container mt-5">
+
+
+              <section style="background-color: #000025;">
+                  <div class="row">
+                    
+                    <% products.forEach((info)=>{ %>
+                    <div class="col-md-3 col-lg-3 mb-4 mb-lg-0 p-2">
+                      <a href="/productinfo/<%=info._id%> " style="text-decoration: none; color: black;"> <div class="card">
+                          <img src="/ProductImg/<%= info._id %>.jpg" class="card-img-top" alt="Laptop" />
+                          <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                              <p class="small"class="text-muted" style="text-decoration: none;">Adidas</p>
+                              <p class="small text-danger"><s>$1099</s></p>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3">
+                              <h5 style="font-size: 130%; width: 70%;" class="mb-0">
+                                <%= info.name %>
+                              </h5>
+                              <h5 style="font-size: 130%;" class=" text-dark mb-0">₹<%= info.price %></h5>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                              <div class="ms-auto text-warning">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                      </div>
+                      <% })%>
+                    </div>
+              </section>
+            </div>
+          </body>
+
+          <style>
+            .row>* {
+              padding-left: 0;
+              padding-right: 0;
+            }
+          </style>
+          <script src="https://kit.fontawesome.com/b3e88707b5.js" crossorigin="anonymous"></script>

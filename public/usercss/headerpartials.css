@@ -1,0 +1,47 @@
+.bx-search{
+    color: #fff;
+    font-size: 24px;
+    margin: 10px;
+    margin-right: 20px;
+}
+
+.bx-cart-alt{
+    color: #fff;
+    font-size: 24px;
+    margin: 10px;
+    margin-right: 20px;
+}
+
+.bx-heart{
+    color: #fff;
+    font-size: 24px;
+    margin: 10px;
+    margin-right: 20px;
+}
+
+.bx-user{
+    color: #fff;
+    font-size: 24px;
+    margin: 10px;
+    margin-right: 20px;
+}
+
+#navbar{
+    position: absolute;
+    margin-left:80% ;
+    top: 0;
+}
+
+
+
+.navbar-nav{
+    flex-direction: row;
+}
+
+li{
+    list-style: none;
+}
+ol,
+ul {
+  padding-left: 0;
+}

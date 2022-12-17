@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/admincss/signin.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,300&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <% if(msg.length> 0){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+
+            <form action="/admin/signin" method="post">
+                <h1>ADMIN PANEL</h1>
+
+                <div class="inputBox">
+                    <input type="text" name="username" required="required">
+                    <span>Username</span>
+                </div>
+
+                <div class="inputBox">
+                    <input type="password" name="password" required="required">
+                    <span>Password</span>
+                </div>
+                <button type="submit">LOGIN</button>
+            </form>
+
+</body>
+
+</html>

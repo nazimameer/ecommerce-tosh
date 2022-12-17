@@ -1,0 +1,27 @@
+.gradient-custom {
+    background: -webkit-linear-gradient(left, #d0d0d0, #00c6ff);
+    }
+    
+    .card-custom {
+    border-bottom-left-radius: 10% 50%;
+    border-top-left-radius: 10% 50%;
+    background-color: #f8f9fa ;
+    }
+    
+    
+    .input-custom {
+    background-color: white ;
+    }
+    
+    .white-text {
+    color: rgb(255, 223, 223);
+    font-weight: 100 ;
+    font-size: 14px;
+    }
+    
+    .back-button {
+    background-color: hsl(52, 0%, 98%);
+    font-weight: 700;
+    color: rgb(0, 0, 0) ;
+    margin-top: 50px ;
+    }

@@ -1,0 +1,99 @@
+.carousel-control-prev-icon{
+    opacity: 0;
+}
+.carousel-control-prev-icon:hover{
+    opacity: 1;
+}
+.carousel-control-next-icon{
+    opacity: 0;
+}
+.carousel-control-next-icon:hover{
+    opacity: 1;
+}
+.carousel-control-next, .carousel-control-prev {
+    width: 5%;
+}
+.carousel-indicators [data-bs-target] {
+    
+    width: 5%;
+    
+}
+.carousel-indicators{
+
+    margin-bottom: 0rem;
+}
+h5{
+    font-size: 3vw;
+    margin-bottom: 0;
+}
+p{
+    font-size: 2vw;
+    margin-bottom: 0;
+
+}
+.carousel-caption {
+    padding-bottom: 0;
+    margin-left: -10%;
+    text-align: start;
+}
+.buttoncls{
+    width: 50px;
+    font-size: 40%;
+    height: 20px;
+    border-radius: 10px;
+    color: white;
+    background: none;
+    border: 1px solid white;
+}
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+    .buttoncls{
+        width: 70px;
+        height: 25px;
+        font-size: 50%;
+        border-radius: 15px;
+    }
+}
+@media only screen 
+and (min-width : 1020px)
+and (max-device-width : 1220px) {
+    .buttoncls{
+        width: 90px;
+        height: 40px;
+        font-size: 80%;
+        border-radius: 20px;
+    }
+}
+@media only screen 
+and (min-width : 996px)
+and (max-device-width : 1018px) {
+    .buttoncls{
+        width: 90px;
+        height: 40px;
+        font-size: 80%;
+        border-radius: 20px;
+    }
+}
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+    .buttoncls{
+        width: 90px;
+        height: 40px;
+        font-size: 80%;
+        border-radius: 20px;
+    }
+}
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}

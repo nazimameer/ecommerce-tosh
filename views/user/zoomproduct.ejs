@@ -1,0 +1,39 @@
+<%- include('../partials/userheader.ejs') %>
+<%- include('../partials/bootstrapH.ejs') %>
+
+
+    <section class="vh-100 gradient-custom">
+        <div style="width:100%; height:100vh;" class="d-flex">
+            <div class="left ms-auto d-flex justify-content-center align-items-center" style="width:50%; height:100vh;">
+                <img src="/ProductImg/<%=zproduct._id %>.jpg" style="width: 40%;">
+            </div>
+            <div class="right me-auto" style="width:50%; height:100vh;">
+                    <div style="margin-top:20%;">
+                <h1 class="text-light"><%=zproduct.name %></h1>
+                <p class="text-light" style="width: 80%;">Aren't some of the best memories the ones made out of impulsivity? Not only will get to rock this simple, comfortable, and low profile short sleeve shirt but you'll have a physical reminder to look back on. If you know, you know.</p>
+                <p class="text-light" style="font-size: 200%;">RS: <%=zproduct.price %> /-</p>
+                <button  onclick="addtocart('<%=zproduct._id %>')" class="btn btn-outline-primary">Add to cart</button>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function addtocart(productId){
+            $.ajax({
+                url:'/addToCart',
+                data:{
+                    product: productId,
+                },
+                method:'post',
+                success:(response)=>{
+                    if(response.status){
+                        let count = $('#cart-count').html()
+                        count = parseInt(count)+1
+                        $('#cart-count').html(count)
+                    }
+                },
+            })
+        }
+    </script>
+<%- include('../partials/bootstrapf.ejs') %>
