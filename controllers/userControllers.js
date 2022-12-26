@@ -618,7 +618,7 @@ applycoupon:async(req,res)=>{
   const coupon = data.coupon;
   const grandTotal = data.grandTotal;
   const couponExist = await couponModel.findOne({ CODE: coupon })
-  const couponPrice = couponExist?.PRICE;
+  const couponPrice = await couponExist.PRICE;
   const id = couponExist?._id;
   const couponid = mongoose.Types.ObjectId(id)
   if(couponExist){
