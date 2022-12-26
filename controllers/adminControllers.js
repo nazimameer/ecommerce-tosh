@@ -13,7 +13,7 @@ const couponModel = require('../models/couponSchema')
 
 // username & password of admin
 const adminUserName = "adminX";
-const adminPassword = "adminx@123";
+const adminPassword = "adminx123";
 //
 
 
