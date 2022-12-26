@@ -4,16 +4,15 @@
   "description": "",
   "main": "app",
   "scripts": {
-    "start": "npm run lint && nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./*.js",
-    "lintFix": "eslint --fix ./*.js"
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
+    "datejs": "^1.0.0-rc3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
@@ -22,12 +21,7 @@
     "mongoose": "^6.7.2",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
-    "razorpay": "^2.8.4"
-  },
-  "devDependencies": {
-    "eslint": "^8.28.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0"
+    "razorpay": "^2.8.4",
+    "sweetalert2": "^11.6.16"
   }
 }

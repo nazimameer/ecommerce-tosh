@@ -8,7 +8,7 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="/admincss/table.css">
 </head>
-<body style="background: #000025 ;">
+<body style="background: #000000 ;">
   <%- include('../partials/adminheader.ejs') %>
  <div class="container mt-5">
     <section class="m-5 mt-5">
@@ -22,6 +22,7 @@
             <th>Price</th>
             <th>Stock</th>
             <th>Image</th>
+            <th>Edit/delete</th>
             <!-- <th><a href="/admin/add_product"><button
               class="btn btn-outline-success mx-2" type="submit">Add Product</button></a></th>-->
         </tr>
@@ -29,20 +30,24 @@
         <tbody>
           <% let count=1; %>
             <% products.forEach((product)=>{ %>
-              <tr data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop-<%= product._id%>"
+              <tr 
               <% if(product.blockStatus==true){ %>
                 class="border border-danger border-4">
                 <% } %>
                 <% if(product.blockStatus==false){ %>
                  >
-                  <% } %>
+                  <%}%>
                 <td><%= count %></td>
                 <td><%= product.name %></td>
                 <td> <%= product.price %></td>
                 <td><%= product.stock %></td>
                 <td><img src="/ProductImg/<%= product._id %>.jpg" alt="" style="width:3rem;"></td>
-                <!-- Modal -->
+                <td>
+                <span style="padding-left: 50px;" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop-<%= product._id%>"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="m16 2.012 3 3L16.713 7.3l-3-3zM4 14v3h3l8.299-8.287-3-3zm0 6h16v2H4z"></path></svg></span>
+                </td>
+                
+                  <!-- Modal -->
                 <div class="modal fade" id="staticBackdrop-<%= product._id %>" data-bs-backdrop="static"
                   data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
@@ -83,3 +88,4 @@
       crossorigin="anonymous"></script>
 </body>
 </html>
+

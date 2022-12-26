@@ -12,7 +12,7 @@
             <link rel="stylesheet" href="/usercss/homepage.css">
           </head>
 
-          <body style="background: #000025">
+          <body style="background: #000000">
 
 
             <div class="container mt-3 mb-3">
@@ -52,9 +52,6 @@
                     <span class="visually-hidden">Next</span>
                   </button>
               </div>
-
-
-
             </div>
 
             <h1 class="text-light text decoration" style="padding-left:7%; font-size: 30px; margin-top: 2%;">Categories</h1>
@@ -89,12 +86,12 @@
                     
                     <% products.forEach((info)=>{ %>
                     <div class="col-md-3 col-lg-3 mb-4 mb-lg-0 p-2">
-                      <a href="/productinfo/<%=info._id%> " style="text-decoration: none; color: black;"> <div class="card">
+                      <a href="/productinfo/<%=info._id%>" style="text-decoration: none; color: black;"> <div class="card">
                           <img src="/ProductImg/<%= info._id %>.jpg" class="card-img-top" alt="Laptop" />
                           <div class="card-body">
                             <div class="d-flex justify-content-between">
                               <p class="small"class="text-muted" style="text-decoration: none;">Adidas</p>
-                              <p class="small text-danger"><s>$1099</s></p>
+                              <p class="small text-danger"><s>₹ 1099</s></p>
                             </div>
 
                             <div class="d-flex justify-content-between mb-3">

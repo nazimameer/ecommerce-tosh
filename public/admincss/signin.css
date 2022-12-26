@@ -5,15 +5,14 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-
 form{
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     flex-direction: column;
-    gap: 30px;
-    background-color:#000025;
+    gap: 20px;
+    background-color:#000000;
 }
 
 .inputBox{
@@ -25,7 +24,7 @@ form{
     width: 20rem;
     padding: 10px;
     border: 1px solid rgba(255,255,255,0.25);
-    background: #000025;
+    background: #000000;
     border-radius: 5px;
     outline: none;
     color: #fff;
@@ -49,7 +48,7 @@ form{
     transform: translateX(10px) translateY(-7px);
     font-size: 0.65em;
     padding: 0 10px;
-    background: #000025;
+    background: #000000;
     border-left: 1px solid #00dfc4;
     border-right: 1px solid #00dfc4;
     letter-spacing: 0.2em;
@@ -71,7 +70,7 @@ h1{
 button{
     width: 7rem;
     height: 3rem;
-    background: #000025;
+    background: #000000;
     color: white;
     border: 1px solid ;
     border-radius: 5px;

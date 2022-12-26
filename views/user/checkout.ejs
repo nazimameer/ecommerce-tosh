@@ -12,13 +12,15 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
-<body style="background: #000025">
+<body style="background: #000000">
   <%- include('../partials/userheader.ejs') %>
 
 
-    <section class="h-100 h-custom" style="background-color:#000025;">
+    <section class="h-100 h-custom" style="background-color:#000000;">
       <form class="mt-4" id="checkout-form" action="">
 
         <div class="container py-5 h-100">
@@ -200,6 +202,21 @@
                                   </path>
                                   <path d="M6 14h6v2H6z"></path>
                                 </svg></a>
+
+                              <div class="card float-end" style="width:50%; background: #000025; border: none;">
+                                <div class="card-body" style="padding: 0;">
+
+                                  <div class="form-group" style="margin-top: 13%;"> <label style="color: #ffffff;">Have
+                                      coupon?</label>
+                                    <div class="input-group"> <input id="couponbox" type="text"
+                                        class="form-control coupon" name="" placeholder="Coupon code"> <span
+                                        class="input-group-append"> <button class="btn btn-primary btn-apply coupon"
+                                          type="button" onclick="applycoupon('<%=grandTotal%>')">Apply</button> </span> </div>
+                                  </div>
+
+                                </div>
+                              </div>
+
                               <p class="small mb-2">Choose your payment method </p>
                               <div class="btn-group">
                                 <input type="radio" class="btn-check" name="paymentmethod" id="option1" required
@@ -213,7 +230,7 @@
                               <hr class="my-4">
                               <div class="d-flex justify-content-between">
                                 <p class="mb-2">Subtotal</p>
-                                <p class="mb-2">₹ <%=total%>.00</p>
+                                <span class="mb-2">₹ <%=total%>.00</span>
                               </div>
 
                               <div class="d-flex justify-content-between">
@@ -223,8 +240,8 @@
 
                               <div class="d-flex justify-content-between mb-4">
                                 <p class="mb-2">Total(Incl. taxes)</p>
-                                <p class="mb-2 float-end">₹ <%=grandTotal%>.00</p>
-                                <input type="text" name="totalprice" id="" value="<%=grandTotal%>" hidden>
+                                <span class="mb-2" id="total">₹ <%=grandTotal%>.00</span>
+                                <input type="text" name="totalprice" id="totalprice" value="<%=grandTotal%>" hidden>
                                 <input type="text" name="userid" id="" value="<%=user%>" hidden>
                               </div>
 
@@ -250,6 +267,7 @@
       </div>
       </div>
     </section>
+    <script src="sweetalert2.all.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
@@ -327,13 +345,39 @@
           })
         }
       })
+      function applycoupon(grandTotal) {
+        const coupon = document.getElementById('couponbox').value;
+        $.ajax({
+          url: '/applycoupon',
+          data: {
+            coupon: coupon,
+            grandTotal: grandTotal,
+          },
+          method: 'post',
+          success: (response) => {
+            if (response.success) {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Coupon Applied Successfully!',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            document.getElementById('total').innerText = '₹ '+response.newtotal+'.00';
+            document.getElementById('totalprice').value = response.newtotal;
+              console.log(document.getElementById('totalprice').value)
+            } else {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'error',
+                title: 'Oops...!',
+                text: 'Enter Valid Coupon!',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          },
+        })
+      }
     </script>
-
-
-
-
-
-
-
-
     <%- include('../partials/bootstrapF.ejs') %>

@@ -13,29 +13,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,300&display=swap" rel="stylesheet">
 
 </head>
+<%- include('../partials/logo.ejs') %>
+    <body>
+        <% if(msg.length> 0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= msg %>
+            </div>
+            <% } %>
+                <form action="/admin/signin" method="post">
+                    <h1>ADMIN PANEL</h1>
 
-<body>
-    <% if(msg.length> 0){ %>
-        <div class="alert alert-danger" role="alert">
-            <%= msg %>
-        </div>
-        <% } %>
+                    <div class="inputBox">
+                        <input type="text" name="username" required="required">
+                        <span>Username</span>
+                    </div>
 
-            <form action="/admin/signin" method="post">
-                <h1>ADMIN PANEL</h1>
-
-                <div class="inputBox">
-                    <input type="text" name="username" required="required">
-                    <span>Username</span>
-                </div>
-
-                <div class="inputBox">
-                    <input type="password" name="password" required="required">
-                    <span>Password</span>
-                </div>
-                <button type="submit">LOGIN</button>
-            </form>
-
-</body>
-
+                    <div class="inputBox">
+                        <input type="password" name="password" required="required">
+                        <span>Password</span>
+                    </div>
+                    <button type="submit">LOGIN</button>
+                </form>
+    </body>
 </html>

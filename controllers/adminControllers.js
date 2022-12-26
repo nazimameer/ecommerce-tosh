@@ -1,15 +1,22 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
+/* eslint-disable no-console */
 const path = require("path");
 const mongoose =require('mongoose')
 const UserModel = require("../models/userSchema");
 const productModel = require("../models/productSchema");
 const categoryModel = require("../models/categorySchema");
 const bannerModel = require('../models/bannerSchema')
-const orderModel = require('../models/orderSchema')
+const orderModel = require('../models/orderSchema');
+const couponModel = require('../models/couponSchema')
 
 // username & password of admin
 const adminUserName = "adminX";
 const adminPassword = "adminx@123";
 //
+
+
 
 module.exports = {
   toAdminHome: (req, res) => {
@@ -21,8 +28,36 @@ module.exports = {
       res.render("admin/signin", { msg: "" });
     }
   },
-  toAdminDash: (req, res) => {
-    res.render("admin/dashboard", { admin: true });
+  toAdminDash: async (req, res) => {
+    const deliveredOrders = await orderModel.countDocuments({ orderstatus:"Delivered"})
+    const shippedOrders = await orderModel.countDocuments({ orderstatus:"Shipped"})
+    const pendingOrders = await orderModel.countDocuments({ orderstatus:"PENDING"})
+    const confirmOrders = await orderModel.countDocuments({ orderstatus:"Confirmed"})
+    const cancelOrders = await orderModel.countDocuments({ orderstatus:"Cancelled"})
+    const orders = await orderModel.countDocuments({})
+    const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
+    const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
+    const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
+    const sales = await orderModel.aggregate([
+        {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
+      ])
+    const totalsale = sales[0].totalsale;
+    const wholeworth = await productModel.aggregate([
+        {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
+      ])
+    const wholeworthprice = wholeworth[0].wholeprice;
+    const salespers = (totalsale/wholeworthprice)*100;
+    const revenue = (totalsale*30)/100;
+    const totalrevenue = (wholeworthprice*30)/100;
+    const revenuepers = (revenue/totalrevenue)*100;
+    const cost = (totalsale*70)/100;
+    const totalcost = (wholeworthprice*70)/100;
+    const costpers = (cost/totalcost)*100;
+    console.log(totalcost)
+
+  
+
+    res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers,totalsale,salespers,revenue,revenuepers,cost,costpers });
   },
   listUsers: async (req, res) => {
     try {
@@ -130,6 +165,7 @@ module.exports = {
     );
     res.redirect("/admin/category_details");
   },
+
   AddProduct: async (req, res) => {
     const addPro = await productModel.create({
       name: req.body.name,
@@ -143,7 +179,7 @@ module.exports = {
     );
     res.redirect("/admin/products_details");
   },
-  oreders:async(req, res)=>{
+  orders:async(req, res)=>{
 
     const orders = await orderModel.find({ status:"Placed" })
 
@@ -203,6 +239,10 @@ module.exports = {
   toBanners:async(req,res)=>{
     const banners = await bannerModel.find({})
     res.render('admin/banners',{ banners })
+  },
+  tocoupons:async(req,res)=>{
+    const coupons = await couponModel.find({})
+    res.render('admin/coupons',{ coupons })
   },
   toAddBanner:(req,res)=>{
     res.render('admin/addbanner') 
@@ -290,7 +330,68 @@ orderedpro:async(req,res)=>{
     },
   ])
   res.render('admin/orderedpro',{ products })
-  
+},
+salesreport:async(req,res)=>{
+    const currentYear = new Date().getFullYear()
+    const firstday = new Date(currentYear,0,1)
+    const lastday = new Date(currentYear,11,31)
+    const orders = await orderModel.find({ status:"Placed",date:{$gte: firstday, $lte: lastday }})
+  res.render('admin/salesreport',{ orders })
+},
+salesReportDaily:async(req,res)=>{
+  var start = new Date();
+  const am = start.setHours(0,0,0,0);
+  var end = new Date();
+  const pm = end.setHours(23,59,59,999);
+  const orders = await orderModel.find({ status:"Placed",date:{$gte: am, $lte: pm }})
+res.render('admin/salesreport',{ orders })
+},
+toaddcoupon:async(req,res)=>{
+  res.render('admin/addcoupon')
+},
+salesReportWeekly:async(req,res)=>{
+  const day = new Date();
+  const start = day.getDate() - day.getDay();
+  const end = start + 6;
+
+  const firstday = new Date(day.setDate(start))
+  const lastday = new Date(day.setDate(end))
+  const orders = await orderModel.find({ status:"Placed",date:{$gte: firstday, $lte: lastday }})
+res.render('admin/salesreport',{ orders })
+},
+addcoupon:async(req,res)=>{
+    const data = req.body;
+    const code =data.CODE;
+    const price =data.PRICE;
+    const expire =data.EXPIRE; 
+    await couponModel.create({
+      CODE:code,
+      PRICE:price,
+      EXPIRE:new Date(expire)
+    })
+    res.redirect('/admin/coupons')
+},
+toeditcoupon:async(req,res)=>{
+  const id = req.params.id
+  const couponid = mongoose.Types.ObjectId(id)
+  const coupons = await couponModel.findOne({ _id:couponid })
+  res.render('admin/editcoupon',{ coupons })
+},
+editcoupon:async(req,res)=>{
+    const data = req.body;
+    const code =data.CODE;
+    const price =data.PRICE;
+    const expire =data.EXPIRE;
+    const id = req.params.id;
+    const couponid = mongoose.Types.ObjectId(id)
+    const coupons = await couponModel.findOneAndUpdate(
+    { _id:couponid, },{$set:{
+      CODE:code,
+      PRICE:price,
+      EXPIRE:new Date(expire)
+    }}
+  )
+  res.redirect('/admin/coupons')
 },
   deleteProduct: async (req, res) => {
     await productModel.findOneAndUpdate({ _id: req.params.id },{$set:{ blockStatus:true}}).then(() => {

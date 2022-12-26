@@ -14,7 +14,7 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   blockStatus: {
-     type: Boolean,
+     type: Boolean, 
      default: false 
     },
 

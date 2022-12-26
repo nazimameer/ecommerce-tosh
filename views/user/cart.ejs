@@ -10,12 +10,12 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 </head>
-<body style="background: #000025">
+<body style="background: #000000">
 <%- include('../partials/userheader.ejs') %>
 
 <% if(Allcart.length===0){ %>
 
-    <section class="h-100 h-custom" style="background-color: #eee;">
+    <section class="h-100 h-custom" style="background-color: rgb(0, 0, 0);">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col">
@@ -39,7 +39,7 @@
                         </section>
 
     <%}else{%>
-<section class="h-100 h-custom" style="background-color: #000025;">
+<section class="h-100 h-custom" style="background-color: #000000;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
@@ -52,8 +52,8 @@
                                 <hr>
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <div>
-                                        <p class="mb-1">Shopping cart</p>
-                                        <p class="mb-0">You have <% let count=1; %> items in your cart</p>
+                                        <h6 class="mb-1">Shopping cart</h6>
+                                        
                                     </div>
                                     <div>
                                         <p class="mb-0"><span class="text-muted"></span> </p>
@@ -71,9 +71,9 @@
                                                 </div>
                                                 <div class="ms-3 ">
                                                     <h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><%= product?.productDetails?.name %></h5>
-                                                    <p class="small mb-0">
+                                                    <span class="small mb-0">
                                                         <!-- category -->
-                                                    </p>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-row align-items-center justify-content-center pe-3 ">
@@ -82,17 +82,18 @@
                                                     
 
 
-                                                 
-                                                  <button class="pe-2 <% if(product?.productQuantity===1){%> d-none<%}%>"  style="border: none; background: none;"  onclick="changeQuantity('<%=product?._id%>','<%=product?.productDetails?._id%>',-1)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 11h14v2H5z"></path></svg></button>
+                                                  <button class="pe-2"  style="border: none; background: none;"  onclick="changeQuantity('<%=product?._id%>','<%=product?.productDetails?._id%>',-1)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M5 11h14v2H5z"></path></svg></button>
                                                   
 
 
 
-                                                    <p id="<%=product?.productDetails?._id%>"  class=" mb-0 d-flex align-items-center justify-content-center pe-2"><%= product?.productQuantity %></p>
+                                                    <p  id="<%=product?.productDetails?._id%>"  class=" mb-0 d-flex align-items-center justify-content-center pe-2"><%= product?.productQuantity %></p>
+                                                    <input type="text" value="<%= product?.productQuantity %>" hidden>
 
 
 
                                                     <button class="" style="border: none; background: none; margin-right: 150px" onclick="changeQuantity('<%=product?._id%>','<%=product?.productDetails?._id%>',1)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path></svg></button>
+
                                                 </div>
                                                 <div style="width: 80px;" class=" d-flex align-items-center justify-content-center pe-3 flex-wrap">
                                                     <h5 class="mb-0" style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;">₹<%= product?.productDetails?.price %>.00</h5>
@@ -107,19 +108,19 @@
                             <hr class="my-4">
 
                             <div class="d-flex justify-content-between">
-                                <p class="mb-2">Subtotal</p>
-                                <p class="mb-2" id="subtotal">₹ <%=total%>.00</p>
+                                <span class="mb-2">Subtotal</span>
+                                <span class="mb-2" id="subtotal">₹ <%=total%>.00</span>
                             
                             </div>
 
                             <div class="d-flex justify-content-between">
-                                <p class="mb-2">Shipping</p>
-                                <p class="mb-2">₹ 70.00</p>
+                                <span class="mb-2">Shipping</span>
+                                <span class="mb-2">₹ 70.00</span>
                             </div>
 
                             <div class="d-flex justify-content-between mb-4">
-                                <p class="mb-2">Total(Incl. taxes)</p>
-                                <p class="mb-2" id="total">₹ <%=grandTotal%>.00</p>
+                                <span class="mb-2">Total(Incl. taxes)</span>
+                                <span class="mb-2" id="total">₹ <%=grandTotal%>.00</span>
                             </div>
                             <div class="d-flex justify-content-end">
                                 <a href="/cart/checkout"><button type="button" class="btn btn-block btn-lg" style="width: 150px; background: #000025;">
@@ -144,6 +145,7 @@
    
    function changeQuantity(cartId,proId,count){
         const quantity = parseInt(document.getElementById(proId).innerHTML)
+        
     $.ajax({
         url:'/change_pro_q',
         data :{
@@ -160,6 +162,7 @@
             console.log(response)
         },
         })
+
    }
 
    function deleteProduct(productId,cartId){
@@ -179,7 +182,10 @@
                 }
             },
         })
+
    }
+
+   
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"

@@ -8,7 +8,8 @@ const bannerModel = require('../models/bannerSchema')
 const mailer = require('../middleware/otp')
 const orderModel = require('../models/orderSchema')
 const Razorpay = require('razorpay');
-const { response } = require('express');
+const couponModel = require('../models/couponSchema')
+const wishlistModel = require('../models/whishlist')
 
 var instance = new Razorpay({
   key_id: 'rzp_test_At7vVgtlG23Lyo',
@@ -19,7 +20,6 @@ let ship;
 let userdata ; 
 let cartcount=0;
 
-  
 // Regex email and password
 const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
 const passwordRegex =
@@ -190,7 +190,7 @@ module.exports = {
       } else {
         res.render("user/login", { msg: "Someting Went Wrong" });
       }
-    } catch {
+    } catch { 
       res
         .status(400)
         .render("user/404", { msg: "invalid credentials!! Try Again" });
@@ -239,7 +239,7 @@ module.exports = {
           },
         },
       ])
-      cartcount = Allcart.length
+      cartcount = Allcart?.length
       let total = await subtotal(user)
       if(total[0]){
        ship = 70;
@@ -319,8 +319,13 @@ module.exports = {
 
   },
   productzoom: async (req, res) => {
+   const id = req.session.user;
+   const userid = mongoose.Types.ObjectId(id)
+   const productId = req.params.id
+   const objId = mongoose.Types.ObjectId(productId) 
     const zproduct = await productModel.findOne({ _id: req.params.id });
-    res.render("user/zoomproduct", { zproduct,cartcount });
+    const wishlist = await wishlistModel.findOne({ userId:userid, products:{ $elemMatch:{ productId: objId }}})
+    res.render("user/zoomproduct", { zproduct,cartcount,wishlist });
   },
   changeProQuantity: async(req,res,next)=>{
     try{
@@ -604,6 +609,72 @@ placeOrder: async(req,res)=>{
     }
 
 },
+applycoupon:async(req,res)=>{
+  const data = req.body
+  const user = req.session.user;
+  const userid =mongoose.Types.ObjectId(user)
+  const coupon = data.coupon;
+  const grandTotal = data.grandTotal;
+  const couponExist = await couponModel.findOne({ CODE: coupon })
+  const couponPrice = couponExist?.PRICE;
+  const id = couponExist?._id;
+  const couponid = mongoose.Types.ObjectId(id)
+  if(couponExist){
+    const userExist = await couponModel.findOne({
+      userId:[{
+        user: userid
+      }]
+    })
+    if(userExist){
+      res.json({ success:false })
+    }else{
+      await couponModel.updateOne({ user:couponid },
+        {userId:{ $push:{ _id: userid  }}})
+        const newtotal = grandTotal-couponPrice;
+        res.json({ success:true, newtotal })
+        console.log(newtotal)
+    }
+  }else{
+    res.json({ success:false })
+  }
+},
+towishlist:async(req,res)=>{
+  const user = req.session.user;
+  const userid = mongoose.Types.ObjectId(user)
+  const wishlist = await wishlistModel.aggregate([
+    {
+      $match:{
+        userId: userid
+      },
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $project:{
+        productItem: "$products.productId",
+      },
+    },
+    {
+      $lookup:{
+        from: "products",
+        localField: "productItem",
+        foreignField: "_id",
+        as:"productDetails"
+      },
+    },
+    {
+        $project:{
+          productItem: 1,
+          productQuantity:1,
+          productDetails : {
+          $arrayElemAt:['$productDetails',0]
+        },
+      },
+    },
+  ])
+  res.render('user/wishlist',{ cartcount, wishlist })
+},
 editSecondary:async(req,res)=>{
   const id = req.session.user;
   const user = mongoose.Types.ObjectId(id);
@@ -624,7 +695,7 @@ varifyPayment:(req,res)=>{
 },
 toMyorders:async(req,res)=>{
   const id= req.session.user
-  const orders = await orderModel.find({status:"Placed"})
+  const orders = await orderModel.find({userId:id,status:"Placed"})
   res.render('user/myorders',{ cartcount, orders })
 },
 cancelOrder:async(req,res)=>{
@@ -678,45 +749,50 @@ orderedPro:async(req,res)=>{
   res.render('user/orderedpro',{ products, cartcount })
   
 },
-orderedproducts:async(req,res)=>{
-  const id =req.session.user; 
-    
-  const products = await orderModel.aggregate([
-      { 
-        $match:{
-          userId:id
-        },
-      },
-      {
-        $unwind: "$productsInfo",
-      },
-      {
-        $project:{
-          productItem: "$productsInfo.productId",
-          productQuantity: "$productsInfo.quantity",
-        },
-      },
-      {
-        $lookup:{
-          from: "products", // from which collection
-          localField: "productItem", // where the matching prop is
-          foreignField: "_id", // what need to match
-          as:"productDetails" // into which key
-        },
-      },
-      {
-          $project:{
-            productItem: 1, // 1 for view it
-            productQuantity:1,
-            productDetails : {
-              $arrayElemAt:['$productDetails',0] // starts from
-            },
-        },
-      },
-    ])
-console.log('@#!#',products);
+addtowishlist:async(req,res)=>{
+  const data = req.body;
+  const user = req.session.user;
+  const userid = mongoose.Types.ObjectId(user)
+  const productId = data.product;
+  const objId = mongoose.Types.ObjectId(productId)
+  const proObj = {
+    productId: objId,
+  };
+  const userExist = await wishlistModel.findOne({ userId: userid })
+  if(userExist){
+    const productExist = await wishlistModel.findOne({ userId:userid, products:{ $elemMatch:{ productId: objId } }})
+    if(productExist){
+        res.json({success:false})
+    }else{
+      await wishlistModel.updateOne(
+        { userId:userid },{$push:{ products: proObj }}).then(()=>{
+          res.json({ success:true })
+        })
+    }
+  }else{
+    await wishlistModel.create({ userId: userid, products:[{
+      productId: objId
+    },
+    ],
+  });
+    res.json({ success:true })
+  }
 },
-  doUserLogout: (req, res) => {
+removewish:async(req,res)=>{
+  const user = req.session.user;
+  const userid = mongoose.Types.ObjectId(user)
+  const data = req.body;
+  const productId = data.product;
+  const objId = mongoose.Types.ObjectId(productId)
+  const proObj = {
+    productId: objId,
+  };
+  await wishlistModel.updateOne(
+    { userId:userid },{$pull:{ products: proObj }}).then(()=>{
+      res.json({ success:true })
+    })
+},
+  doUserLogout:(req, res) => {
     req.session.destroy();
     res.redirect("/");
   },
