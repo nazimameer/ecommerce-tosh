@@ -1,5 +1,8 @@
 const express = require("express");
-
+// username & password of admin
+const adminUserName = "adminX";
+const adminPassword = "adminx123";
+//
 const router = express.Router();
 const sessionmiddleware = require('../middleware/sessionmiddleware')
 
