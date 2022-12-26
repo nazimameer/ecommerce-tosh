@@ -239,7 +239,12 @@ module.exports = {
           },
         },
       ])
-      cartcount = Allcart?.length
+      if(Allcart.length){
+
+        cartcount = Allcart?.length
+      }else{
+        cartcount = 0;
+      }
       let total = await subtotal(user)
       if(total[0]){
        ship = 70;
