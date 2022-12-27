@@ -669,7 +669,6 @@ applycoupon:async(req,res)=>{
         {userId:{ $push:{ _id: userid  }}})
         const newtotal = grandTotal-couponPrice;
         res.json({ success:true, newtotal })
-        console.log(newtotal)
     }
   }else{
     res.json({ success:false })
