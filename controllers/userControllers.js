@@ -122,14 +122,14 @@ module.exports = {
       const products = await productModel.find({ blockStatus:false });
       const cats = await categoryModel.find({});
       const banners = await bannerModel.find({ blockStatus: false })
-      res.render("user/home", { products, cats, banners, user:true, cartcount });
+      res.render("user/home", { products, cats, banners, USERIN:true, cartcount });
       
     }
     else {
       const products = await productModel.find({ blockStatus:false });
       const cats = await categoryModel.find({});
       const banners = await bannerModel.find({ blockStatus: false })
-       res.render("user/home", { products, cats, banners, user: false, cartcount  });
+       res.render("user/home", { products, cats, banners, USERIN: false, cartcount  });
      }
   },
   goToSignup: (req, res) => {
@@ -201,6 +201,42 @@ module.exports = {
       res.render("user/home", { infos, cartcount });
     });
   },
+  forgotpassword:(req,res)=>{
+    res.render('user/forget', {msg: ""})
+  },
+  postforgotpass:async(req,res)=>{
+    const data = req.body;
+    console.log(data);
+    const mailDetails = {
+      from: 'nazimameerpp@gmail.com',
+      to: req.body.Email,
+      subject: "Tosh VERIFICATION",
+      html: `<p>YOUR OTP FOR REGISTERING IN TOSH  IS <h1> ${mailer.OTP} <h1> </p>`,
+    };
+
+    //check the email exist on db
+
+    const emailExists = await UserModel.findOne({ email: data.Email })
+console.log(emailExists)
+    if(emailExists){
+      mailer.mailTransporter.sendMail(mailDetails,(err,data)=>{
+        if (err) {
+        console.log(err);
+        } else {
+        console.log("hai");
+          res.render('user/newpassword');
+        }
+      })
+    }else {
+
+      res.render("user/forget", { msg: "something went wrong" });
+    }
+
+  },
+  newpass:(req,res)=>{
+    const data = req.body
+    console.log(data)
+  },
   viewCart: async (req,res)=>{
 
     
@@ -246,11 +282,11 @@ module.exports = {
       if(total[0]){
        ship = 70;
         const grandTotal = total[0].total + ship;
-          res.render('user/cart',{ Allcart, total: total[0].total, grandTotal, cartcount});
+          res.render('user/cart',{ Allcart, total: total[0].total, grandTotal, cartcount,USERIN:true});
       }else{
         total = 0;
        const grandTotal = 0;
-        res.render('user/cart',{ Allcart, total, grandTotal,cartcount});
+        res.render('user/cart',{ Allcart, total, grandTotal,cartcount,USERIN:true});
       }
       
   },
@@ -417,11 +453,11 @@ toCheckOut:async(req,res)=>{
     if(total[0]){
      ship = 70;
       const grandTotal = total[0].total + ship;
-        res.render('user/checkout',{ total: total[0].total, grandTotal,cartcount, address,user });
+        res.render('user/checkout',{ total: total[0].total, grandTotal,cartcount, address,user,USERIN:true});
   } 
 },
 addAddress:(req,res)=>{
-    res.render('user/addsecondary',{cartcount})
+    res.render('user/addsecondary',{cartcount,USERIN:true})
 },
 addAddresstodb:async(req,res)=>{
   
@@ -449,7 +485,7 @@ addAddresstodb:async(req,res)=>{
     const id = req.session.user;
     const user = mongoose.Types.ObjectId(id);
     const address = await addressModel.findOne({ userId: user})
-    res.render('user/profile',{ cartcount, address })
+    res.render('user/profile',{ cartcount, address,USERIN:true })
 },
 AddPrimary:async (req,res)=>{
   const id = req.session.user;
@@ -475,13 +511,13 @@ AddPrimary:async (req,res)=>{
 },
 AddPrimarypage:(req,res)=>{
 
-  res.render('user/addprimary',{cartcount})
+  res.render('user/addprimary',{cartcount,USERIN:true})
 },
 editprimary: async(req,res)=>{
   const id = req.session.user;
   const user = mongoose.Types.ObjectId(id);
     const address = await addressModel.findOne({ userId: user})
-    res.render('user/editprimary',{ cartcount, address })
+    res.render('user/editprimary',{ cartcount, address,USERIN:true })
 },
 otpPage: async(req,res)=>{
   try {
@@ -496,7 +532,7 @@ otpPage: async(req,res)=>{
     };
       const userExist = await emailExists(req.body.email);
 
-      if (userExist === true) {
+      if (userExist === true){
 
         res.render("user/signup", {
 
@@ -675,13 +711,13 @@ towishlist:async(req,res)=>{
       },
     },
   ])
-  res.render('user/wishlist',{ cartcount, wishlist })
+  res.render('user/wishlist',{ cartcount, wishlist,USERIN:true })
 },
 editSecondary:async(req,res)=>{
   const id = req.session.user;
   const user = mongoose.Types.ObjectId(id);
     const address = await addressModel.findOne({ userId: user})
-  res.render('user/editsecondary',{ cartcount, address})
+  res.render('user/editsecondary',{ cartcount, address,USERIN:true})
 },
 varifyPayment:(req,res)=>{
   const datas = req.body
@@ -698,7 +734,7 @@ varifyPayment:(req,res)=>{
 toMyorders:async(req,res)=>{
   const id= req.session.user
   const orders = await orderModel.find({userId:id,status:"Placed"})
-  res.render('user/myorders',{ cartcount, orders })
+  res.render('user/myorders',{ cartcount, orders,USERIN:true })
 },
 cancelOrder:async(req,res)=>{
   const data = req.body;
@@ -748,7 +784,7 @@ orderedPro:async(req,res)=>{
       },
     },
   ])
-  res.render('user/orderedpro',{ products, cartcount })
+  res.render('user/orderedpro',{ products, cartcount,USERIN:true })
   
 },
 addtowishlist:async(req,res)=>{

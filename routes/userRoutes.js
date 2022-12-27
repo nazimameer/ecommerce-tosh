@@ -21,7 +21,10 @@ router.post("/sign_up", userControllers.sendToDatabase);
 router.post('/otp',userControllers.otpPage)
 router.get("/log_in", userControllers.goToLogin);
 router.post("/log_in", userControllers.doLogin);
+router.get('/forgotpass',userControllers.forgotpassword)
+router.post('/forgot',userControllers.postforgotpass)
 router.get("/product_info/:id", userControllers.getProductInfo);
+router.post('/newpass',userControllers.newpass)
 router.get("/cart",sessionmiddleware.verifyLoginUser,userControllers.viewCart);
 router.post('/change_pro_q',sessionmiddleware.verifyLoginUser,userControllers.changeProQuantity,subtotal) 
 router.get('/cart/checkout',sessionmiddleware.verifyLoginUser,userControllers.toCheckOut)
