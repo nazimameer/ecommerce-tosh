@@ -123,7 +123,6 @@ module.exports = {
       const cats = await categoryModel.find({});
       const banners = await bannerModel.find({ blockStatus: false })
       res.render("user/home", { products, cats, banners, USERIN:true, cartcount });
-      
     }
     else {
       const products = await productModel.find({ blockStatus:false });
