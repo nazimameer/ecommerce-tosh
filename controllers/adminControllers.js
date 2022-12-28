@@ -34,8 +34,8 @@ module.exports = {
       const shippedOrders = await orderModel.countDocuments({ orderstatus:"Shipped"})
       const pendingOrders = await orderModel.countDocuments({ orderstatus:"PENDING"})
       const confirmOrders = await orderModel.countDocuments({ orderstatus:"Confirmed"})
-      // const cancelOrders = await orderModel.countDocuments({ orderstatus:"Cancelled"})
-      // const orders = await orderModel.countDocuments({})
+      const cancelOrders = await orderModel.countDocuments({ orderstatus:"Cancelled"})
+      const orders = await orderModel.countDocuments({})
       // const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
       // const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
       // const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
@@ -58,7 +58,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders:0,orders:0,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
