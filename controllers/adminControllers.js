@@ -48,7 +48,7 @@ module.exports = {
         ])
       const wholeworthprice = wholeworth[0].wholeprice;
       // const salespers = (totalsale/wholeworthprice)*100;
-      const revenue = (totalsale*30)/100;
+      // const revenue = (totalsale*30)/100;
       // const totalrevenue = (wholeworthprice*30)/100;
       // const revenuepers = (revenue/totalrevenue)*100;
       // const cost = (totalsale*70)/100;
@@ -58,7 +58,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale:0,salespers:0,revenue,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
