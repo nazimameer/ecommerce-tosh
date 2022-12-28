@@ -31,7 +31,7 @@ module.exports = {
     try{
 
       const deliveredOrders = await orderModel.countDocuments({ orderstatus:"Delivered"})
-      // const shippedOrders = await orderModel.countDocuments({ orderstatus:"Shipped"})
+      const shippedOrders = await orderModel.countDocuments({ orderstatus:"Shipped"})
       // const pendingOrders = await orderModel.countDocuments({ orderstatus:"PENDING"})
       // const confirmOrders = await orderModel.countDocuments({ orderstatus:"Confirmed"})
       // const cancelOrders = await orderModel.countDocuments({ orderstatus:"Cancelled"})
@@ -58,7 +58,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders:0, pendingOrders:0, confirmOrders:0, cancelOrders:0,orders:0,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders:0, confirmOrders:0, cancelOrders:0,orders:0,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
