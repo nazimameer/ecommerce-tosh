@@ -38,23 +38,23 @@ module.exports = {
       // const orders = await orderModel.countDocuments({})
       // const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
       // const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
-      const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
+      // const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
       // const sales = await orderModel.aggregate([
       //     {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
       //   ])
-      const totalsale = sales[0].totalsale;
+      // const totalsale = sales[0].totalsale;
       // const wholeworth = await productModel.aggregate([
       //     {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
       //   ])
-      const wholeworthprice = wholeworth[0].wholeprice;
-      const salespers = (totalsale/wholeworthprice)*100;
-      const revenue = (totalsale*30)/100;
-      const totalrevenue = (wholeworthprice*30)/100;
-      const revenuepers = (revenue/totalrevenue)*100;
-      const cost = (totalsale*70)/100;
-      const totalcost = (wholeworthprice*70)/100;
-      const costpers = (cost/totalcost)*100;
-      console.log(totalcost)
+      // const wholeworthprice = wholeworth[0].wholeprice;
+      // const salespers = (totalsale/wholeworthprice)*100;
+      // const revenue = (totalsale*30)/100;
+      // const totalrevenue = (wholeworthprice*30)/100;
+      // const revenuepers = (revenue/totalrevenue)*100;
+      // const cost = (totalsale*70)/100;
+      // const totalcost = (wholeworthprice*70)/100;
+      // const costpers = (cost/totalcost)*100;
+      // console.log(totalcost)
   
     
   
