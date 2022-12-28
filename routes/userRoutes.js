@@ -50,7 +50,7 @@ router.get('/orderedpro/:id',sessionmiddleware.verifyLoginUser,userControllers.o
 router.post('/addtowishlist',userControllers.addtowishlist)
 router.get('/wishlist',sessionmiddleware.verifyLoginUser,userControllers.towishlist)
 router.post('/removewish',sessionmiddleware.verifyLoginUser,userControllers.removewish)
-router.get("/user/Log_out",sessionmiddleware.verifyLoginUser, userControllers.doUserLogout);
+router.get("/user/log_out",sessionmiddleware.verifyLoginUser, userControllers.doUserLogout);
 
 module.exports = router; 
    
