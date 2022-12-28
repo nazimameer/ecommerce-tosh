@@ -56,6 +56,52 @@
                                             </div>
                                         </div>
 
+                                        
+                                        <% Allcart.forEach((product)=>{%>
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="d-flex flex-row align-items-center">
+                                                            <div>
+                                                                <img src="/ProductImg/<%=product?.productDetails?._id%>.jpg"
+                                                                    class="img-fluid rounded-3" alt="Shopping item"
+                                                                    style="width: 65px;">
+                                                            </div>
+                                                            <div class="ms-3 ">
+                                                                <h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><%= product?.productDetails?.name %></h5>
+                                                                <span class="small mb-0">
+                                                                    <!-- category -->
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex flex-row align-items-center justify-content-center pe-3 ">
+                                                            <div style="width: 50px;" class=" d-flex align-items-center justify-content-center pe-5 ">
+            
+                                                                
+            
+            
+                                                              <button class="pe-2"  style="border: none; background: none;"  onclick="changeQuantity('<%=product?._id%>','<%=product?.productDetails?._id%>',-1)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M5 11h14v2H5z"></path></svg></button>
+                                                              
+            
+            
+            
+                                                                <p  id="<%=product?.productDetails?._id%>"  class=" mb-0 d-flex align-items-center justify-content-center pe-2"><%= product?.productQuantity %></p>
+                                                                <input type="text" value="<%= product?.productQuantity %>" hidden>
+            
+            
+            
+                                                                <button class="" style="border: none; background: none; margin-right: 150px" onclick="changeQuantity('<%=product?._id%>','<%=product?.productDetails?._id%>',1)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path></svg></button>
+            
+                                                            </div>
+                                                            <div style="width: 80px;" class=" d-flex align-items-center justify-content-center pe-3 flex-wrap">
+                                                                <h5 class="mb-0" style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;">₹<%= product?.productDetails?.price %>.00</h5>
+                                                            </div>
+                                                            <button onclick="deleteProduct('<%=product?.productDetails?._id%>','<%=product?._id%>')" style="color: #cecece; background: none; border: none;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="m16.192 6.344-4.243 4.242-4.242-4.242-1.414 1.414L10.535 12l-4.242 4.242 1.414 1.414 4.242-4.242 4.243 4.242 1.414-1.414L13.364 12l4.242-4.242z"></path></svg></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <%})%>
 
 
 
