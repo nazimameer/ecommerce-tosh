@@ -20,7 +20,7 @@ router.get("/sign_up", userControllers.goToSignup);
 router.post("/sign_up", userControllers.sendToDatabase);
 router.post('/otp',userControllers.otpPage)
 router.get("/log_in", userControllers.goToLogin);
-router.post("/log_in", userControllers.doLogin);
+router.post("/login", userControllers.doLogin);
 router.get('/forgotpass',userControllers.forgotpassword)
 router.post('/forgot',userControllers.postforgotpass)
 router.get("/product_info/:id", userControllers.getProductInfo);
