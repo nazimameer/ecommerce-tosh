@@ -334,7 +334,10 @@
             method: 'post',
             success: (response) => {
               if (response.status) {
-                swal("Good job!", "Order Placed  Successfully!", "success");
+                swal("Payment Done!", "Order Placed  Successfully!", "success").then(()=>{
+
+                  location.href="/myorders"
+                })
               } else {
                 swal({
                   title: "PAYMENT FAILED!",
