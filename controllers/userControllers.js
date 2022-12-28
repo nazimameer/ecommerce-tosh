@@ -297,7 +297,7 @@ module.exports = {
       }else{
         total = 0;
        const grandTotal = 0;
-        res.render('user/cart',{ Allcart, total, grandTotal,cartcount,USERIN:true,async: true});
+        res.render('user/cart',{ Allcart, total, grandTotal,cartcount,USERIN:true});
       }
       
   },
