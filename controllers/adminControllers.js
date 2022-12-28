@@ -46,10 +46,10 @@ module.exports = {
       const wholeworth = await productModel.aggregate([
           {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
         ])
-      const wholeworthprice = wholeworth[0].wholeprice;
+      const wholeworthprice = await wholeworth[0].wholeprice;
       // const salespers = (totalsale/wholeworthprice)*100;
       // const revenue = (totalsale*30)/100;
-      const totalrevenue = (wholeworthprice*30)/100;
+      // const totalrevenue = (wholeworthprice*30)/100;
       // const revenuepers = (revenue/totalrevenue)*100;
       // const cost = (totalsale*70)/100;
       // const totalcost = (wholeworthprice*70)/100;
