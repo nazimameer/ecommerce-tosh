@@ -250,59 +250,57 @@ module.exports = {
     }
     console.log(data)
   },
-  viewCart: async (req,res)=>{
-      const user = req.session.user;
-      const userId = mongoose.Types.ObjectId(user);
-      const Allcart = await cartModel.aggregate([
-        {
-          $match:{
-            userId
-          },
-        },
-        {
-          $unwind: "$items",
-        },
-        {
-          $project:{
-            productItem: "$items.productId",
-            productQuantity: "$items.quantity",
-          },
-        },
-        {
-          $lookup:{
-            from: "products",
-            localField: "productItem",
-            foreignField: "_id",
-            as:"productDetails"
-          },
-        },
-        {
-            $project:{
-              productItem: 1,
-              productQuantity:1,
-              productDetails : {
-              $arrayElemAt:['$productDetails',0]
-            },
-          },
-        },
-      ])
-      let cartcount = await Allcart.length;
+  // viewCart: async (req,res)=>{
+  //     const user = req.session.user;
+  //     const userId = mongoose.Types.ObjectId(user);
+  //     const Allcart = await cartModel.aggregate([
+  //       {
+  //         $match:{
+  //           userId
+  //         },
+  //       },
+  //       {
+  //         $unwind: "$items",
+  //       },
+  //       {
+  //         $project:{
+  //           productItem: "$items.productId",
+  //           productQuantity: "$items.quantity",
+  //         },
+  //       },
+  //       {
+  //         $lookup:{
+  //           from: "products",
+  //           localField: "productItem",
+  //           foreignField: "_id",
+  //           as:"productDetails"
+  //         },
+  //       },
+  //       {
+  //           $project:{
+  //             productItem: 1,
+  //             productQuantity:1,
+  //             productDetails : {
+  //             $arrayElemAt:['$productDetails',0]
+  //           },
+  //         },
+  //       },
+  //     ])
+  //     let cartcount = await Allcart.length;
       
-      console.log(Allcart)
-      let total = await subtotal(user)
-      if(total[0]){
-       ship = 70;
-       const totals = total[0]
-       const totales = totals.total
-        const grandTotal = total[0].total + ship;
-          res.render('user/cart',{ Allcart, total: totales, grandTotal, cartcount,USERIN:true});
-      }else{
-        total = 0;
-       const grandTotal = 0;
-        res.render('user/cart',{ Allcart, total, grandTotal,cartcount,USERIN:true});
-      }
+  //     console.log(Allcart)
+  //     let total = await subtotal(user)
+  //     if(total[0]){
+  //      ship = 70;
+  //       const grandTotal = total[0].total + ship;
+  //         res.render('user/cart',{ Allcart, total: total[0].total, grandTotal, cartcount,USERIN:true});
+  //     }else{
+  //       total = 0;
+  //      const grandTotal = 0;
+  //       res.render('user/cart',{ Allcart, total, grandTotal,cartcount,USERIN:true});
+  //     }
       
-  },
+  // },
   addToCart: async (req, res) => {
     const data = req.body;
     const id = data.product;
