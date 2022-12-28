@@ -36,13 +36,13 @@ module.exports = {
       const confirmOrders = await orderModel.countDocuments({ orderstatus:"Confirmed"})
       const cancelOrders = await orderModel.countDocuments({ orderstatus:"Cancelled"})
       const orders = await orderModel.countDocuments({})
-      // const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
-      // const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
-      // const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
-      // const sales = await orderModel.aggregate([
-      //     {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
-      //   ])
-      // const totalsale = sales[0].totalsale;
+      const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
+      const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
+      const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
+      const sales = await orderModel.aggregate([
+          {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
+        ])
+      const totalsale = sales[0].totalsale;
       // const wholeworth = await productModel.aggregate([
       //     {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
       //   ])
@@ -58,7 +58,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers,totalsale,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
