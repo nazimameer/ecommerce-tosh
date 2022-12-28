@@ -162,7 +162,8 @@
                       <div class="card  text-white rounded-3" style="background-color:#000025;
                   <%if(!address.secondaryAddress.username){%>
                     ">
-                        <%}else{%>
+                        <%}%>
+                        <%if(address.secondaryAddress.username){%> 
                           top: 14%;">
                           <%}%>
 
