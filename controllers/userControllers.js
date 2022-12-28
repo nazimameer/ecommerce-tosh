@@ -290,6 +290,7 @@ module.exports = {
       
       console.log(Allcart)
       let total = await subtotal(user)
+      
       if(total[0]){
        ship = 70;
         const grandTotal = total[0].total + ship;
