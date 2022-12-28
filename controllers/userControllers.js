@@ -292,8 +292,10 @@ module.exports = {
       let total = await subtotal(user)
       if(total[0]){
        ship = 70;
+       const totals = total[0]
+       const totales = totals.total
         const grandTotal = total[0].total + ship;
-          res.render('user/cart',{ Allcart, total: total[0].total, grandTotal, cartcount,USERIN:true});
+          res.render('user/cart',{ Allcart, total: totales, grandTotal, cartcount,USERIN:true});
       }else{
         total = 0;
        const grandTotal = 0;
