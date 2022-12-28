@@ -141,8 +141,7 @@ module.exports = {
     
  let otp = req.body.otp;
   if(mailer.OTP == otp){
-    const data = req.body
-
+    const data = req.body;
     const newUser = new UserModel({
       username: userdata.username,
       email: userdata.email,
@@ -205,7 +204,7 @@ module.exports = {
   },
   postforgotpass:async(req,res)=>{
     const data = req.body;
-    console.log(data);
+    const mail = req.body.Email;
     const mailDetails = {
       from: 'nazimameerpp@gmail.com',
       to: req.body.Email,
@@ -216,29 +215,42 @@ module.exports = {
     //check the email exist on db
 
     const emailExists = await UserModel.findOne({ email: data.Email })
-console.log(emailExists)
     if(emailExists){
       mailer.mailTransporter.sendMail(mailDetails,(err,data)=>{
         if (err) {
         console.log(err);
         } else {
         console.log("hai");
-          res.render('user/newpassword');
+          res.render('user/newpassword',{msg:"", emailId: mail});
         }
       })
     }else {
 
-      res.render("user/forget", { msg: "something went wrong" });
+      res.render("user/forget", { msg: "something went wrong"});
     }
 
   },
-  newpass:(req,res)=>{
-    const data = req.body
+  newpass:async(req,res)=>{
+    const data = req.body;
+    console.log(data)
+    const email = data.email;
+    const newpass = data.newpass;
+    const user = await UserModel.findOne({ email: email })
+    if(user.password == newpass){
+      res.render("user/newpassword",{ msg:"Create a new password which not similar to old one" })
+    }else{
+      let otp = req.body.otp;
+      if(mailer.OTP == otp){
+        await UserModel.findOneAndUpdate({ email:email },{$set:{ password:newpass }}).then(()=>{
+          res.redirect("/log_in")
+        })
+      }else{
+        res.render("user/newpassword",{ msg:"Incorrect OTP please try again!" })
+      }
+    }
     console.log(data)
   },
   viewCart: async (req,res)=>{
-
-    
       const user = req.session.user;
       const userId = mongoose.Types.ObjectId(user);
       const Allcart = await cartModel.aggregate([
