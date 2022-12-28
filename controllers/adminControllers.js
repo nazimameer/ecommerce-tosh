@@ -42,13 +42,13 @@ module.exports = {
       const sales = await orderModel.aggregate([
           {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
         ])
-      const totalsale = sales[0].totalsale;
-      // const wholeworth = await productModel.aggregate([
-      //     {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
-      //   ])
-      // const wholeworthprice = wholeworth[0].wholeprice;
+      // const totalsale = sales[0].totalsale;
+      const wholeworth = await productModel.aggregate([
+          {$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}
+        ])
+      const wholeworthprice = wholeworth[0].wholeprice;
       // const salespers = (totalsale/wholeworthprice)*100;
-      // const revenue = (totalsale*30)/100;
+      const revenue = (totalsale*30)/100;
       // const totalrevenue = (wholeworthprice*30)/100;
       // const revenuepers = (revenue/totalrevenue)*100;
       // const cost = (totalsale*70)/100;
@@ -58,7 +58,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard", { admin: true, deliveredOrders, shippedOrders, pendingOrders, confirmOrders, cancelOrders,orders,orderpers:0,totalsale:0,salespers:0,revenue,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
