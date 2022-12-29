@@ -10,6 +10,7 @@ const categoryModel = require("../models/categorySchema");
 const bannerModel = require('../models/bannerSchema')
 const orderModel = require('../models/orderSchema');
 const couponModel = require('../models/couponSchema')
+const excelJs = require('exceljs')
 
 // username & password of admin
 const adminUserName = "adminX";
@@ -38,22 +39,22 @@ module.exports = {
       const orders = await orderModel.countDocuments({})
       const wholestock = await productModel.aggregate([{$group:{_id:'',"stock":{$sum: '$stock' }}}, {$project: {_id: 0,"TotalAmount": '$stock'}}]);
       const orderedstock = await orderModel.aggregate([{$unwind:"$productsInfo"},{$group:{_id:'',count:{$sum:'$productsInfo.quantity'}}},{$project:{_id:0,"count":"$count"}}])
-      // const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
+      const orderpers = (orderedstock[0].count/wholestock[0].TotalAmount)*100;
       const sales = await orderModel.aggregate([
           {$group:{_id:'',"total":{$sum:'$total'}}},{$project:{_id:0,'totalsale':'$total'}}
         ])
-      // const totalsale = sales[0].totalsale;
+      const totalsale = sales[0].totalsale;
       const wholeworth = await productModel.aggregate([{$project:{price:1,stock:1, total:{ $multiply:["$price","$stock"] }}},{$group:{ _id:'',"total":{$sum:"$total"}}},{$project:{_id:0,'wholeprice':"$total"}}])
-      // const wholeworthprice =  wholeworth[0].wholeprice;
-      // console.log(wholeworthprice)
-      // const salespers = (totalsale/wholeworthprice)*100;
-      // const revenue = (totalsale*30)/100;
-      // const totalrevenue = (wholeworthprice*30)/100;
-      // const revenuepers = (revenue/totalrevenue)*100;
-      // const cost = (totalsale*70)/100;
-      // const totalcost = (wholeworthprice*70)/100;
-      // const costpers = (cost/totalcost)*100;
-      // console.log(totalcost)
+      const wholeworthprice =  wholeworth[0].wholeprice;
+      console.log(wholeworthprice)
+      const salespers = (totalsale/wholeworthprice)*100;
+      const revenue = (totalsale*30)/100;
+      const totalrevenue = (wholeworthprice*30)/100;
+      const revenuepers = (revenue/totalrevenue)*100;
+      const cost = (totalsale*70)/100;
+      const totalcost = (wholeworthprice*70)/100;
+      const costpers = (cost/totalcost)*100;
+      console.log(totalcost)
   
     
   
@@ -337,18 +338,20 @@ orderedpro:async(req,res)=>{
 },
 salesreport:async(req,res)=>{
     const currentYear = new Date().getFullYear()
-    const firstday = new Date(currentYear,0,1)
-    const lastday = new Date(currentYear,11,31)
-    const orders = await orderModel.find({ status:"Placed",date:{$gte: firstday, $lte: lastday }})
-  res.render('admin/salesreport',{ orders })
+    const from = new Date(currentYear,0,1)
+    const to = new Date(currentYear,11,31)
+    const date = "monthly"
+    const orders = await orderModel.find({ status:"Placed",date:{$gte: from, $lte: to }})
+  res.render('admin/salesreport',{ orders, from,to,date })
 },
 salesReportDaily:async(req,res)=>{
   var start = new Date();
-  const am = start.setHours(0,0,0,0);
-  var end = new Date();
-  const pm = end.setHours(23,59,59,999);
-  const orders = await orderModel.find({ status:"Placed",date:{$gte: am, $lte: pm }})
-res.render('admin/salesreport',{ orders })
+  const from = start.setHours(0,0,0,0);
+  var to = new Date();
+  const pm = to.setHours(23,59,59,999);
+  const date = "daily"
+  const orders = await orderModel.find({ status:"Placed",date:{$gte: from, $lte: to }})
+res.render('admin/salesreport',{ orders, from,to,date })
 },
 toaddcoupon:async(req,res)=>{
   res.render('admin/addcoupon')
@@ -358,10 +361,12 @@ salesReportWeekly:async(req,res)=>{
   const start = day.getDate() - day.getDay();
   const end = start + 6;
 
-  const firstday = new Date(day.setDate(start))
-  const lastday = new Date(day.setDate(end))
-  const orders = await orderModel.find({ status:"Placed",date:{$gte: firstday, $lte: lastday }})
-res.render('admin/salesreport',{ orders })
+  const from = new Date(day.setDate(start))
+  const to = new Date(day.setDate(end))
+  console.log(from,to)
+  const date = "weekly"
+  const orders = await orderModel.find({ status:"Placed",date:{$gte: from, $lte: to }})
+res.render('admin/salesreport',{ orders, from,to,date })
 },
 addcoupon:async(req,res)=>{
     const data = req.body;
@@ -396,6 +401,60 @@ editcoupon:async(req,res)=>{
     }}
   )
   res.redirect('/admin/coupons')
+},
+downloadExcel:async(req,res)=>{
+  const date = req.body;
+  console.log(date.from)
+  let from;
+  let to;
+  if(date.from=="daily"){
+    const str = new Date();
+     from = str.setHours(0,0,0,0);
+     to = new Date();
+  }else if(date.from=="weekly"){
+    const day = new Date();
+    const start = day.getDate() - day.getDay();
+    const end = start + 6;
+
+     from = new Date(day.setDate(start))
+     to = new Date(day.setDate(end))
+  }else if(date.from=="monthly"){
+    const currentYear = new Date().getFullYear()
+     from = new Date(currentYear,0,1)
+     to = new Date(currentYear,11,31)
+  }
+  console.log(from, to)
+  let orderData = await orderModel.find({status: "Placed",date:{ $gte: from, $lte: to }});
+
+  const workbook = new excelJs.Workbook();
+  const worksheet = workbook.addWorksheet("My Sheet");
+  
+  worksheet.columns = [
+    { header: "No", key: "No", width: 30 },
+    { header: "Id", key: "Id", width: 15 },
+    { header: "Payment method", key: "Payment method", width: 15 },
+    { header: "Status", key: "Status", width: 15 },
+    { header: "Total amount", key: "Total amount", width: 15 },
+    { header: "Date", key: "Date", width: 15 },
+  ];
+   let count=1;
+  orderData.forEach((orderData) => {
+    worksheet.addRow({
+      No: count,
+      Id: orderData._id,
+      Paymentmethod: orderData.paymentMethod,
+      Status: orderData.orderstatus,
+      Totalamount: orderData.total,
+      Date: orderData.date.toDateString(),
+    });
+    count++; 
+  });
+
+  await workbook.xlsx.writeFile("order.xlsx").then((data) => {
+    const location = path.join(__dirname + "../../order.xlsx");
+    res.download(location);
+  });
+
 },
   deleteProduct: async (req, res) => {
     await productModel.findOneAndUpdate({ _id: req.params.id },{$set:{ blockStatus:true}}).then(() => {

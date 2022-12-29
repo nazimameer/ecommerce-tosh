@@ -41,6 +41,7 @@ router.get('/salesreport/weekly',adminControllers.salesReportWeekly)
 router.get('/salesreport/daily',adminControllers.salesReportDaily)
 router.get('/addcoupon',adminControllers.toaddcoupon)
 router.get('/editcoupon/:id',adminControllers.toeditcoupon)
+router.post("/downloadExcel",adminControllers.downloadExcel)
 router.get("/Log_out", adminControllers.doAdminLogout);
 
 module.exports = router;

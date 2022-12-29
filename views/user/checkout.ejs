@@ -288,7 +288,10 @@
           data: $('#checkout-form').serialize(),
           success: (response) => {
             if (response.success) {
-              swal("Good job!", "Order Placed  Successfully!", "success");
+              swal("Good job!", "Order Placed  Successfully!", "success").then(()=>{
+
+              location.href="/myorders"
+              })
             } else {
               RazorpayPayment(response)
             }

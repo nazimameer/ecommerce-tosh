@@ -44,7 +44,6 @@ router.post('/applycoupon',sessionmiddleware.verifyLoginUser,userControllers.app
 router.get('/addprimary',sessionmiddleware.verifyLoginUser,userControllers.AddPrimarypage)
 router.get('/editSecondary',sessionmiddleware.verifyLoginUser,userControllers.editSecondary)
 router.get('/myorders',sessionmiddleware.verifyLoginUser,userControllers.toMyorders)
-
 router.post('/cancelOrder',sessionmiddleware.verifyLoginUser,userControllers.cancelOrder)
 router.post('/varify-payment',sessionmiddleware.verifyLoginUser,userControllers.varifyPayment)
 router.get('/orderedpro/:id',sessionmiddleware.verifyLoginUser,userControllers.orderedPro)
@@ -53,5 +52,5 @@ router.get('/wishlist',sessionmiddleware.verifyLoginUser,userControllers.towishl
 router.post('/removewish',sessionmiddleware.verifyLoginUser,userControllers.removewish)
 router.get("/user/log_out",sessionmiddleware.verifyLoginUser, userControllers.doUserLogout);
 
-module.exports = router; 
+module.exports = router;  
    
