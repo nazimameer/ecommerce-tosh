@@ -48,7 +48,7 @@
                     <div class="card-body p-4">
                         <div class="row">
                             
-                                <h5 class="mb-3" style=" font-family: 'Poppins', sans-serif; font-weight: 700;"><a href="/" class="text-body" style="text-decoration: none; margin-left: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:; margin-right: 10px;
+                                <h5 class="mb-3" style=" font-family: 'Poppins', sans-serif; font-weight: 700;"><a href="/" class="text-body" style="text-decoration: none; margin-left: 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); margin-right: 10px;
                                     margin-bottom: 5px;"><path d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z"></path></svg>Keep Shopping</a></h5>
                                 <hr>
                                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -61,16 +61,16 @@
                                     </div>
                                 </div>
                                 <% wishlist.forEach((product)=>{%>
-                                <a href="/productinfo/<%=product?.productDetails?._id%>" style="text-decoration: none; color: #000000;"><div class="card mb-3">
+                                <a href="/productinfo/<%=product.productDetails._id%>" style="text-decoration: none; color: #000000;"><div class="card mb-3">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
                                                 <div>
-                                                    <img src="/ProductImg/<%=product?.productDetails?._id%>.jpg"
+                                                    <img src="/ProductImg/<%=product.productDetails._id%>.jpg"
                                                         class="img-fluid rounded-3" alt="Shopping item"
                                                         style="width: 65px;">
                                                 </div>
-                                                <div class="ms-3 "><%=product?.productDetails?.name %>
+                                                <div class="ms-3 "><%=product.productDetails.name %>
                                                     <span class="small mb-0">
                                                         <!-- category -->
                                                     </span>
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="d-flex flex-row align-items-center justify-content-center pe-3 ">
                                                 <div style="width: 50px;" class=" d-flex align-items-center justify-content-center pe-5 ">
-                                                    <button style="border: none; background: none;" onclick="removewish('<%=product?.productDetails?._id%>')"><h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(0, 0, 0);transform: ;msFilter:;"><path d="M20.205 4.791a5.938 5.938 0 0 0-4.209-1.754A5.906 5.906 0 0 0 12 4.595a5.904 5.904 0 0 0-3.996-1.558 5.942 5.942 0 0 0-4.213 1.758c-2.353 2.363-2.352 6.059.002 8.412L12 21.414l8.207-8.207c2.354-2.353 2.355-6.049-.002-8.416z"></path></svg></h5></button>
+                                                    <button style="border: none; background: none;" onclick="removewish('<%=product.productDetails._id%>')"><h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgb(0, 0, 0);"><path d="M20.205 4.791a5.938 5.938 0 0 0-4.209-1.754A5.906 5.906 0 0 0 12 4.595a5.904 5.904 0 0 0-3.996-1.558 5.942 5.942 0 0 0-4.213 1.758c-2.353 2.363-2.352 6.059.002 8.412L12 21.414l8.207-8.207c2.354-2.353 2.355-6.049-.002-8.416z"></path></svg></h5></button>
 
                                                 </div>
                                                 
