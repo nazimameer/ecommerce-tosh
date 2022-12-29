@@ -24,7 +24,11 @@ module.exports = {
     if (req.session.admin) {
       res.redirect("/admin/dashboard");
     
-    } else {
+    }else if(req.session.loggedIn==true){
+      res.redirect("/admin/dashboard");
+
+    }
+     else {
       res.render("admin/signin", { msg: "" });
     }
   },
