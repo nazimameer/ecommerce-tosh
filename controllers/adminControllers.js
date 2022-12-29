@@ -413,7 +413,7 @@ deletecat:async(req,res)=>{
   const id = req.params.id;
   const objId = mongoose.Types.ObjectId(id)
   const addcat = await categoryModel.deleteOne({ _id: objId });
-  res.redirect('/category_details')
+  res.redirect('/admin/category_details')
 },
 downloadExcel:async(req,res)=>{
   const date = req.body;
