@@ -302,6 +302,12 @@ module.exports = {
       }
       
   },
+  categorypage:async(req,res)=>{
+    const id = req.params.id;
+    const objId = mongoose.Types.ObjectId(id)
+    const cats = await categoryModel.findOne({_id:objId})
+    res.render('user/catergory.ejs')
+  },
   addToCart: async (req, res) => {
     const data = req.body;
     const id = data.product;

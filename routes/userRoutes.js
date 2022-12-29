@@ -25,6 +25,7 @@ router.get('/forgotpass',userControllers.forgotpassword)
 router.post('/forgot',userControllers.postforgotpass)
 router.get("/product_info/:id", userControllers.getProductInfo);
 router.post('/newpass',userControllers.newpass)
+router.get('/categorypage/:id',sessionmiddleware.verifyLoginUser,userControllers.categorypage)
 router.get("/cart",sessionmiddleware.verifyLoginUser,userControllers.viewCart);
 router.post('/change_pro_q',sessionmiddleware.verifyLoginUser,userControllers.changeProQuantity,subtotal) 
 router.get('/cart/checkout',sessionmiddleware.verifyLoginUser,userControllers.toCheckOut)
