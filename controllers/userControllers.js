@@ -245,7 +245,7 @@ module.exports = {
           res.redirect("/log_in")
         })
       }else{
-        res.render("user/newpassword",{ msg:"Incorrect OTP please try again!" })
+        res.render("user/newpassword",{ msg:"Incorrect OTP please try again!",emailId:email })
       }
     }
     console.log(data)
