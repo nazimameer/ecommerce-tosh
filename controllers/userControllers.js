@@ -9,7 +9,8 @@ const mailer = require('../middleware/otp')
 const orderModel = require('../models/orderSchema')
 const Razorpay = require('razorpay');
 const couponModel = require('../models/couponSchema')
-const wishlistModel = require('../models/whishlist')
+const wishlistModel = require('../models/whishlist');
+const whishlist = require('../models/whishlist');
 
 var instance = new Razorpay({
   key_id: 'rzp_test_At7vVgtlG23Lyo',
@@ -794,6 +795,7 @@ towishlist:async(req,res)=>{
     },
   ])
   const cartcount = await cartnum(user)
+  
   
   res.render('user/wishlist',{ cartcount, wishlist,USERIN:true })
 },
