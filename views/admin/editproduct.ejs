@@ -11,7 +11,7 @@
 
 <body style="background: #000025 ;">
 
-
+ 
     <%- include('../partials/adminheader.ejs') %>
 
         <% info.forEach((product)=>{ %>
@@ -20,17 +20,22 @@
                     <div class="row">
                         <div class="col-md-6">
                             <h1 style="font-family: Lucida Console;" class="text-light">Edit Product</h1>
-                            <form action="/admin/products_details/edit/<%= product._id %>" method="post" enctype="multipart/form-data">
+                            <form action="/admin/products_details/edit/<%= product._id %>" method="post" enctype="multipart/form-data" onsubmit="return addproductvalid(this)">
 
-                                <input type="text" name="name" class="form-control mt-4" placeholder="Name"
+                                <input type="text" id="name" name="name" class="form-control mt-4" placeholder="Name"
                                     value="<%= product.name %>">
+                                    <p id="nameError" style="color: white;"></p>
 
-                                <input type="number" name="price" class="form-control mt-4" placeholder="Price"
+
+                                <input type="number"  id="price" name="price" class="form-control mt-4" placeholder="Price"
                                     value="<%= product.price %>">
+                                    <p id="priceError" style="color: white;"></p>
 
-                                    <input type="number" name="stock" class="form-control mt-4" placeholder="Stock" value="<%= product.stock %>">
+                                    <input type="number" id="stock" name="stock" class="form-control mt-4" placeholder="Stock" value="<%= product.stock %>">
+                            <p id="stockError" style="color: white;"></p>
 
-                                    <img src="/ProductImg/<%=product._id %>.jpg" style="width:80px; margin-top: 5%;">g
+
+                                    <img src="/ProductImg/<%=product._id %>.jpg" style="width:80px; margin-top: 5%;">
                                         <!-- file upload -->
 
                                         <div class="mb-3">
@@ -50,6 +55,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
                     crossorigin="anonymous"></script>
+                    <script src="/js/adminsidevalidation.js"></script>
 </body>
 
 </html>

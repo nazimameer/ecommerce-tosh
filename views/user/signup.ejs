@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="/admincss/signin.css">
 
 
-</head>
+</head> 
 
 <body>
   <%- include('../partials/logo.ejs') %>
@@ -26,7 +26,7 @@
     </div>
     <% } %>
       
-      <form action="/otp" method="post" role="form" onsubmit="validatingForm(this)">
+      <form action="/otp" method="post" role="form" onsubmit="return validatingForm(this)">
         <h1>SIGNUP</h1>
 
         <div class="inputBox">

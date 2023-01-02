@@ -115,6 +115,54 @@ function varifyPayment(details){
 
 }
 
+function cartnum(id){
+  return new Promise ((resolve,reject)=>{
+    const user = id;
+    console.log('#id',id)
+    const userId = mongoose.Types.ObjectId(user);
+     cartModel.aggregate([
+      {
+        $match:{
+          userId
+        },
+      },
+      {
+        $unwind: "$items",
+      },
+      {
+        $project:{
+          productItem: "$items.productId",
+          productQuantity: "$items.quantity",
+        },
+      },
+      {
+        $lookup:{
+          from: "products",
+          localField: "productItem",
+          foreignField: "_id",
+          as:"productDetails"
+        },
+      },
+      {
+          $project:{
+            productItem: 1,   
+            productQuantity:1,      
+            productDetails : {
+            $arrayElemAt:['$productDetails',0]
+          }, 
+        },
+      },
+    ]).then((Allcart)=>{
+      console.log("#1:",Allcart.length)
+      const length = Allcart.length;
+      console.log('@a',length)
+      resolve(length)
+    })
+    
+  })
+ 
+}
+
 // All Controllers
 module.exports = {
   goHome: async (req, res) => {
@@ -122,12 +170,16 @@ module.exports = {
       const products = await productModel.find({ blockStatus:false });
       const cats = await categoryModel.find({});
       const banners = await bannerModel.find({ blockStatus: false })
-      res.render("user/home", { products, cats, banners, USERIN:true, cartcount });
-    }
+      const user = req.session.user;
+      const cart = await cartnum(user)
+      console.log('$ja',cart)
+      res.render("user/home", { products, cats, banners, USERIN:true, cartcount:cart });
+    } 
     else {
       const products = await productModel.find({ blockStatus:false });
       const cats = await categoryModel.find({});
       const banners = await bannerModel.find({ blockStatus: false })
+      const cartcount = 0;
        res.render("user/home", { products, cats, banners, USERIN: false, cartcount  });
      }
   },
@@ -194,9 +246,11 @@ module.exports = {
         .render("user/404", { msg: "invalid credentials!! Try Again" });
     }
   },
-  getProductInfo: (req, res) => {
-    productModel.find({ _id: req.params.id }).then((infos) => {
+  getProductInfo: async(req, res) => {
+    productModel.find({ _id: req.params.id }).then(async(infos) => {
+      
       res.render("user/home", { infos, cartcount });
+
     });
   },
   forgotpassword:(req,res)=>{
@@ -286,7 +340,13 @@ module.exports = {
           },
         },
       ])
-      let cartcount = await Allcart.length;
+      let cartcount = 0;
+      if(Allcart.length==null){
+        cartcount = 0;
+      }else{
+         cartcount = await Allcart.length;
+      }
+      
       
       console.log(Allcart)
       let total = await subtotal(user)
@@ -306,6 +366,7 @@ module.exports = {
     const id = req.params.id;
     const objId = mongoose.Types.ObjectId(id)
     const cats = await categoryModel.findOne({_id:objId})
+    const cartcount = await cartnum(id)
     res.render('user/category.ejs',{ cartcount, cats})
   },
   addToCart: async (req, res) => {
@@ -351,11 +412,11 @@ module.exports = {
           },
         ],
       });
-     cartcount = await userCart.length;
+      const cartcount = await cartnum(user)
       res.json({ status: true });
     }
   },
-  deleteInCart:async(req,res)=>{
+  deleteInCart:async(req,res)=>{ 
     const data = req.body;
 
     const objId = mongoose.Types.ObjectId(data.product)
@@ -381,6 +442,7 @@ module.exports = {
    const objId = mongoose.Types.ObjectId(productId) 
     const zproduct = await productModel.findOne({ _id: req.params.id });
     const wishlist = await wishlistModel.findOne({ userId:userid, products:{ $elemMatch:{ productId: objId }}})
+    const cartcount = await cartnum(id)
     res.render("user/zoomproduct", { zproduct,cartcount,wishlist });
   },
   changeProQuantity: async(req,res,next)=>{
@@ -468,6 +530,7 @@ toCheckOut:async(req,res)=>{
     const address = await addressModel.findOne({
       userId: user
     })
+    const cartcount = await cartnum(user)
     if(total[0]){
      ship = 70;
       const grandTotal = total[0].total + ship;
@@ -503,6 +566,8 @@ addAddresstodb:async(req,res)=>{
     const id = req.session.user;
     const user = mongoose.Types.ObjectId(id);
     const address = await addressModel.findOne({ userId: user})
+    const cartcount = await cartnum(id)
+
     res.render('user/profile',{ cartcount, address,USERIN:true })
 },
 AddPrimary:async (req,res)=>{
@@ -728,6 +793,8 @@ towishlist:async(req,res)=>{
       },
     },
   ])
+  const cartcount = await cartnum(user)
+  
   res.render('user/wishlist',{ cartcount, wishlist,USERIN:true })
 },
 editSecondary:async(req,res)=>{
@@ -750,10 +817,14 @@ varifyPayment:(req,res)=>{
 },
 toMyorders:async(req,res)=>{
   const id= req.session.user
-  const orders = await orderModel.find({userId:id,status:"Placed"})
+  const order = await orderModel.find({userId:id,status:"Placed"})
+  const cartcount = await cartnum(id)
+  const orders = order.reverse()
+  
+ 
   res.render('user/myorders',{ cartcount, orders,USERIN:true })
-},
-cancelOrder:async(req,res)=>{
+},  
+cancelOrder:async(req,res)=>{ 
   const data = req.body;
   const id = data.orderId;
   const orderId = mongoose.Types.ObjectId(id);
@@ -801,9 +872,12 @@ orderedPro:async(req,res)=>{
       },
     },
   ])
+
+  const user = req.session.user
+      const cartcount = await cartnum(user)
   res.render('user/orderedpro',{ products, cartcount,USERIN:true })
   
-},
+},    
 addtowishlist:async(req,res)=>{
   const data = req.body;
   const user = req.session.user;

@@ -7,10 +7,10 @@ const ObjectId = Schema.Types.ObjectId;
 const cartSchema = new Schema({
   userId: {
     type: ObjectId,
-    ref: "Signupdetails",
+    ref: "Signupdetails",  
   }, 
   items: [
-    {
+    {    
       productId: {
         type: ObjectId,
         ref: "products",

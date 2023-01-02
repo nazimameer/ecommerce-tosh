@@ -1,5 +1,5 @@
 
-function validatingForm(form) {
+function validatingForm(scope) {
 
   const userName = document.getElementById("username");
   const email = document.getElementById("email");
@@ -10,6 +10,8 @@ function validatingForm(form) {
       "please enter your  user name..! ";
     userName.focus();
     return false;
+  }else{
+    document.getElementById("userNameError").innerHTML ="";
   }
   var regexname = /^[a-zA-Z\-]+$/;
 
@@ -18,6 +20,8 @@ function validatingForm(form) {
       "User name should not contain  special characters..! ";
     userName.focus();
     return false;
+  }else{
+    document.getElementById("userNameError").innerHTML ="";
   }
 
   if (email.value === "") {
@@ -25,6 +29,8 @@ function validatingForm(form) {
       "please enter your mail id..! ";
     email.focus();
     return false;
+  }else{
+    document.getElementById("emailError").innerHTML ="";
   }
   const re =
     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -33,6 +39,8 @@ function validatingForm(form) {
       "please enter valid email..! ";
     email.focus();
     return false;
+  }else{
+    document.getElementById("emailError").innerHTML ="";
   }
   var regexpass = /(?=(.*?[a-zA-Z|0-9]){4})/;
   if (regexpass.test(password.value) === false) {
@@ -40,13 +48,17 @@ function validatingForm(form) {
       "password should have atleast 4 digits..! ";
     password.focus();
     return false;
+  }else{
+    document.getElementById("passwordError").innerHTML ="";
   }
 
   if (password.value === "") {
     document.getElementById("passwordError").innerHTML =
-      "please enter your password..! ";
+      "please enter a password..! ";
     password.focus();
     return false;
+  }else{
+    document.getElementById("passwordError").innerHTML ="";
   }
 
   return true;

@@ -18,19 +18,23 @@
                 <div class="row">
                     <div class="col-md-6">
                         <h1 style="font-family: Lucida Console;" class="text-light">Add Product</h1>
-                        <form action="/admin/products/add_product" method="post" enctype="multipart/form-data">
+                        <form action="/admin/products/add_product" method="post" enctype="multipart/form-data" onsubmit="return addproductvalid(this)">
 
-                            <input type="text" name="name" class="form-control mt-4" placeholder="Name">
+                            <input type="text" id="name" name="name" class="form-control mt-4" placeholder="Name">
+                            <p id="nameError" style="color: white;"></p>
 
-                            <input type="number" name="price" class="form-control mt-4" placeholder="Price">
+                            <input type="number" id="price" name="price" class="form-control mt-4" placeholder="Price">
+                            <p id="priceError" style="color: white;"></p>
 
-                            <input type="number" name="stock" class="form-control mt-4" placeholder="Stock">
+                            <input type="number" id="stock" name="stock" class="form-control mt-4" placeholder="Stock">
+                            <p id="stockError" style="color: white;"></p>
 
                             <!-- file upload -->
 
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label text-light">Choose a File to Upload</label>
                                     <input class="form-control" type="file" id="formFile" name="image">
+                                    <p id="fileError" style="color: white;"></p>
                                 </div>
 
                             <button type="submit" class="btn btn-success mt-3">Add</button>
@@ -42,6 +46,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
+            <script src="/js/adminsidevalidation.js"></script>
+
 </body>
 
 </html>

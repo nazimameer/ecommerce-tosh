@@ -1,24 +1,33 @@
 <%- include('../partials/bootstrapH.ejs') %>
-
+<%- include('../partials/adminheader.ejs') %>
+<% if(msg.length> 0){ %>
+  <div class="alert alert-danger" role="alert">
+      <%= msg %>
+  </div>
+  <% } %>
   <div class="container mt-5">
     <h1 class="text-light mb-5">Add Category</h1>
-    <form action="/admin/category/add_category" method="post" enctype="multipart/form-data">
+    <form action="/admin/category/add_category" method="post" enctype="multipart/form-data" onsubmit="return catvalid(this)">
 
       <!-- Email input -->
       <div class="form-outline">
-        <input type="text" name="name" id="form1Example1" class="form-control" placeholder="Category Name" />
+        <input type="text" name="name" id="name" class="form-control"  placeholder="Category Name" />
+        <p id="nameError" style="color: white;"></p>
       </div>
       <!-- file upload -->
 
       <div class="mb-3">
         <label for="formFile" class="form-label text-light">Choose a File to Upload</label>
-        <input class="form-control" type="file" id="formFile" name="Image">
+        <input class="form-control" type="file" id="formFile" name="Image" >
+        <p id="imageError" style="color: white;"></p>
       </div>
       <!-- Submit button -->
       <button type="submit" class="btn btn-primary btn-block">ADD</button>
     </form>
 
   </div>
+<script src="/js/adminsidevalidation.js"></script>
+
 
 
   <%- include('../partials/bootstrapF.ejs') %>

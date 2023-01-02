@@ -68,7 +68,7 @@ module.exports = {
       console.log(err)
     }
   },
-  listUsers: async (req, res) => {
+  listUsers: async (req, res) => {  
     try {
       await UserModel.find({}).then((users) => {
         res.render("admin/users", { users });
@@ -130,7 +130,7 @@ module.exports = {
     }
   },
   viewAddProduct: (req, res) => {
-    res.render("admin/addproducts");
+    res.render("admin/addproducts",{ msg:"" });
   },
 
   goToEditProduct: (req, res) => {
@@ -139,22 +139,28 @@ module.exports = {
     });
   },
   editProduct: async (req, res) => {
-    try {
-       await productModel.replaceOne(
-        { _id: req.params.id },
-        { name: req.body.name, price: req.body.price, stock: req.body.stock }
-      );
+    
 
-      const editImage = req.files.image;
-      const editImageName = req.params.id;
+      if(req.body){
+        await productModel.replaceOne(
+         { _id: req.params.id },
+         { name: req.body.name, price: req.body.price, stock: req.body.stock }
+       );
+      }
+        if(req.files!=null){
+          console.log('jesl')
+          const editImage = req.files.image;
+          const editImageName = req.params.id;
+          editImage.mv(
+            path.join(__dirname, "../public/ProductImg/") + editImageName + ".jpg"
+          );
+          
+        }
+        console.log('halo')
 
-      editImage.mv(
-        path.join(__dirname, "../public/ProductImg/") + editImageName + ".jpg"
-      );
       res.redirect("/admin/products_details");
-    } catch {
-      res.render("admin/404");
-    }
+   
+   
   },
   
   toCategory: async (req, res) => {
@@ -163,35 +169,50 @@ module.exports = {
     res.render("admin/category", { cats });
   },
   addCategory: (req, res) => {
-    res.render("admin/addCategory");
+    res.render("admin/addCategory",{msg:""});
   },
   addCategoryTOdb: async (req, res) => {
+    const catname = req.body.name;
+    const catExist = await categoryModel.findOne({ name:catname })
+  if(catExist){
+    res.render("admin/addCategory", { msg:"category already exist" });
+  }else{
     const addcat = await categoryModel.create({ name: req.body.name });
     const image = req.files.Image;
     const imageName = addcat._id;
     image.mv(
       path.join(__dirname, "../public/CategoryImg/") + imageName + ".jpg"
     );
+    
     res.redirect("/admin/category_details");
+  }
   },
 
   AddProduct: async (req, res) => {
-    const addPro = await productModel.create({
-      name: req.body.name,
-      price: req.body.price,
-      stock: req.body.stock,
-    });
-    const proImage = req.files.image;
-    const proImageName = addPro._id;
-    proImage.mv(
-      path.join(__dirname, "../public/ProductImg/") + proImageName + ".jpg"
-    );
-    res.redirect("/admin/products_details");
+    const proname = req.body.name;
+    const proExist = await productModel.findOne({ name:proname })
+    if(proExist){
+    res.render("admin/addproducts",{ msg:"product already exist" });
+
+    }else{
+       
+      const addPro = await productModel.create({
+        name: req.body.name,
+        price: req.body.price,
+        stock: req.body.stock,
+      });
+      const proImage = req.files.image;
+      const proImageName = addPro._id;
+      proImage.mv(
+        path.join(__dirname, "../public/ProductImg/") + proImageName + ".jpg",
+        );
+        res.redirect("/admin/products_details");
+    }
   },
   orders:async(req, res)=>{
 
-    const orders = await orderModel.find({ status:"Placed" })
-
+    const order = await orderModel.find({ status:"Placed" })
+    const orders = order.reverse()
     res.render("admin/orders",{ orders });
   },
   confirmstatus:async(req,res)=>{
@@ -338,7 +359,9 @@ orderedpro:async(req,res)=>{
       },
     },
   ])
-  res.render('admin/orderedpro',{ products })
+
+  const address = await orderModel.findOne({ _id:orderId})
+  res.render('admin/orderedpro',{ products,address })
 },
 salesreport:async(req,res)=>{
     const currentYear = new Date().getFullYear()
@@ -358,8 +381,8 @@ salesReportDaily:async(req,res)=>{
 res.render('admin/salesreport',{ orders, from,to,date })
 },
 toaddcoupon:async(req,res)=>{
-  res.render('admin/addcoupon')
-},
+  res.render('admin/addcoupon',{ msg:"" })
+}, 
 salesReportWeekly:async(req,res)=>{
   const day = new Date();
   const start = day.getDate() - day.getDay();
@@ -375,13 +398,21 @@ res.render('admin/salesreport',{ orders, from,to,date })
 addcoupon:async(req,res)=>{
     const data = req.body;
     const code =data.CODE;
+    const codeExist = await couponModel.findOne({ CODE:code})
     const price =data.PRICE;
     const expire =data.EXPIRE; 
-    await couponModel.create({
-      CODE:code,
-      PRICE:price,
-      EXPIRE:new Date(expire)
-    })
+    if(codeExist){
+
+      res.render('admin/addcoupon',{ msg:"coupon already exist" })
+      
+    }else{
+      await couponModel.create({
+        CODE:code,
+        PRICE:price,
+        EXPIRE:new Date(expire)
+      })
+      
+    }
     res.redirect('/admin/coupons')
 },
 toeditcoupon:async(req,res)=>{
@@ -406,9 +437,30 @@ editcoupon:async(req,res)=>{
   )
   res.redirect('/admin/coupons')
 },
-editcategory:(req,res)=>{
-  res.render('admin/editcat')
+editcategory:async(req,res)=>{
+  const catid = req.params.id;
+  const id = mongoose.Types.ObjectId(catid)
+  const cat = await categoryModel.findOne({ _id: id})
+  console.log(cat)
+  res.render('admin/editcat',{msg:"", cat})
 },
+editcat:async(req,res)=>{
+  const id = req.params.id;
+  const catid = mongoose.Types.ObjectId(id)
+  const data =req.body;
+  const namec = data.name
+  const cat = await categoryModel.findOneAndUpdate({ _id:catid },{ $set:{ name:namec }})
+
+  if(req.files!=null){
+    console.log('jesl')
+    const editImage = req.files.image;
+    const editImageName = cat._id; 
+    editImage.mv( 
+      path.join(__dirname, "../public/CategoryImg/") + editImageName + ".jpg"
+    );
+  } 
+  res.redirect('/admin/category_details')
+},   
 deletecat:async(req,res)=>{
   const id = req.params.id;
   const objId = mongoose.Types.ObjectId(id)

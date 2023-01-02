@@ -42,8 +42,9 @@ router.get('/salesreport/daily',adminControllers.salesReportDaily)
 router.get('/addcoupon',adminControllers.toaddcoupon)
 router.get('/editcoupon/:id',adminControllers.toeditcoupon)
 router.post("/downloadExcel",adminControllers.downloadExcel)
-router.get('/editcat',adminControllers.editcategory);
+router.get('/editcat/:id',adminControllers.editcategory);
 router.get('/deletecat/:id',adminControllers.deletecat)
+router.post('/category/edit/:id',adminControllers.editcat)
 router.get("/Log_out", adminControllers.doAdminLogout);
 
 module.exports = router;
