@@ -458,7 +458,7 @@ editcat:async(req,res)=>{
     editImage.mv( 
       path.join(__dirname, "../public/CategoryImg/") + editImageName + ".jpg"
     );
-  } 
+  }       
   res.redirect('/admin/category_details')
 },   
 deletecat:async(req,res)=>{
