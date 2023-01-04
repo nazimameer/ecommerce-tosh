@@ -92,8 +92,7 @@ module.exports = {
       req.body.password === process.env.ADMINPASSWORD
      
     ) {
-
-      req.session.admin = req.body.email;
+      req.session.admin = req.body.username;
       req.session.loggedIn = true;
       res.redirect("/admin/dashboard");
     } else {

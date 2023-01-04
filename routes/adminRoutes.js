@@ -1,51 +1,54 @@
 const express = require("express");
 
 const router = express.Router();
+const session = require('../middleware/sessionmiddleware')
 
 const adminControllers = require("../controllers/adminControllers");
 
-router.get("/", adminControllers.toAdminHome);
+
+
+router.get("/",session.verifyLoginAdmin,adminControllers.toAdminHome);
 router.post("/signin", adminControllers.toAdminSignin);
-router.get("/dashboard", adminControllers.toAdminDash); 
-router.get("/user_details", adminControllers.listUsers);
-router.get("/users/block/:id", adminControllers.blockUser);
-router.get("/users/unblock/:id", adminControllers.unblockUser); 
-router.get("/products_details", adminControllers.listProducts);
-router.get("/products_details/edit/:id", adminControllers.goToEditProduct);
-router.post("/products_details/edit/:id", adminControllers.editProduct); 
-router.get("/products_details/delete/:id", adminControllers.deleteProduct);
-router.get('/products_details/restore/:id',adminControllers.restorepro)
-router.get("/banner/edit/:id", adminControllers.goToEditBanner);
-router.post("/banner/edit/:id", adminControllers.EditBanner);
-router.get('/banner/delete/:id',adminControllers.deleteBanner)
-router.get('/banner/restore/:id',adminControllers.restorebanner)
-router.get("/add_product", adminControllers.viewAddProduct);
-router.post("/products/add_product", adminControllers.AddProduct);
-router.post('/banner/add_banner',adminControllers.addBannerTodb)
-router.get("/users", adminControllers.toUsers);
-router.get('/Banners',adminControllers.toBanners)
-router.get('/coupons',adminControllers.tocoupons)
-router.get('/add_banner',adminControllers.toAddBanner)
-router.get("/category_details", adminControllers.toCategory);
-router.get("/category/add_category", adminControllers.addCategory);
-router.post("/category/add_category", adminControllers.addCategoryTOdb);
-router.post('/coupons/add_coupon',adminControllers.addcoupon)
-router.post('/coupons/edit_coupon/:id',adminControllers.editcoupon)
-router.get('/orders',adminControllers.orders)
-router.post('/confirmstatus',adminControllers.confirmstatus)
-router.post('/shippedstatus',adminControllers.shippedstatus)
-router.post('/deliveredstatus',adminControllers.deliveredstatus)
-router.get('/orderedpro/:id',adminControllers.orderedpro)
-router.get('/salesreport/yearly',adminControllers.salesreport) 
-router.get('/salesreport/weekly',adminControllers.salesReportWeekly)
-router.get('/salesreport/daily',adminControllers.salesReportDaily)
-router.get('/addcoupon',adminControllers.toaddcoupon)
-router.get('/editcoupon/:id',adminControllers.toeditcoupon)
-router.post("/downloadExcel",adminControllers.downloadExcel)
-router.get('/editcat/:id',adminControllers.editcategory);
-router.get('/deletecat/:id',adminControllers.deletecat)
-router.get('/restorecat/:id',adminControllers.restorecat)
-router.post('/category/edit/:id',adminControllers.editcat)
+router.get("/dashboard",session.verifyLoginAdmin,adminControllers.toAdminDash); 
+router.get("/user_details",session.verifyLoginAdmin, adminControllers.listUsers);
+router.get("/users/block/:id",session.verifyLoginAdmin, adminControllers.blockUser);
+router.get("/users/unblock/:id",session.verifyLoginAdmin, adminControllers.unblockUser); 
+router.get("/products_details",session.verifyLoginAdmin, adminControllers.listProducts);
+router.get("/products_details/edit/:id",session.verifyLoginAdmin, adminControllers.goToEditProduct);
+router.post("/products_details/edit/:id",session.verifyLoginAdmin, adminControllers.editProduct); 
+router.get("/products_details/delete/:id",session.verifyLoginAdmin, adminControllers.deleteProduct);
+router.get('/products_details/restore/:id',session.verifyLoginAdmin,adminControllers.restorepro)
+router.get("/banner/edit/:id",session.verifyLoginAdmin, adminControllers.goToEditBanner);
+router.post("/banner/edit/:id",session.verifyLoginAdmin, adminControllers.EditBanner);
+router.get('/banner/delete/:id',session.verifyLoginAdmin,adminControllers.deleteBanner)
+router.get('/banner/restore/:id',session.verifyLoginAdmin,adminControllers.restorebanner)
+router.get("/add_product",session.verifyLoginAdmin, adminControllers.viewAddProduct);
+router.post("/products/add_product",session.verifyLoginAdmin, adminControllers.AddProduct);
+router.post('/banner/add_banner',session.verifyLoginAdmin,adminControllers.addBannerTodb)
+router.get("/users",session.verifyLoginAdmin,session.verifyLoginAdmin, adminControllers.toUsers);
+router.get('/Banners',session.verifyLoginAdmin,adminControllers.toBanners)
+router.get('/coupons',session.verifyLoginAdmin,adminControllers.tocoupons)
+router.get('/add_banner',session.verifyLoginAdmin,adminControllers.toAddBanner)
+router.get("/category_details",session.verifyLoginAdmin, adminControllers.toCategory);
+router.get("/category/add_category",session.verifyLoginAdmin, adminControllers.addCategory);
+router.post("/category/add_category",session.verifyLoginAdmin, adminControllers.addCategoryTOdb);
+router.post('/coupons/add_coupon',session.verifyLoginAdmin,adminControllers.addcoupon)
+router.post('/coupons/edit_coupon/:id',session.verifyLoginAdmin,adminControllers.editcoupon)
+router.get('/orders',session.verifyLoginAdmin,adminControllers.orders)
+router.post('/confirmstatus',session.verifyLoginAdmin,adminControllers.confirmstatus)
+router.post('/shippedstatus',session.verifyLoginAdmin,adminControllers.shippedstatus)
+router.post('/deliveredstatus',session.verifyLoginAdmin,adminControllers.deliveredstatus)
+router.get('/orderedpro/:id',session.verifyLoginAdmin,adminControllers.orderedpro)
+router.get('/salesreport/yearly',session.verifyLoginAdmin,adminControllers.salesreport) 
+router.get('/salesreport/weekly',session.verifyLoginAdmin,adminControllers.salesReportWeekly)
+router.get('/salesreport/daily',session.verifyLoginAdmin,adminControllers.salesReportDaily)
+router.get('/addcoupon',session.verifyLoginAdmin,adminControllers.toaddcoupon)
+router.get('/editcoupon/:id',session.verifyLoginAdmin,adminControllers.toeditcoupon)
+router.post("/downloadExcel",session.verifyLoginAdmin,adminControllers.downloadExcel)
+router.get('/editcat/:id',session.verifyLoginAdmin,adminControllers.editcategory);
+router.get('/deletecat/:id',session.verifyLoginAdmin,adminControllers.deletecat)
+router.get('/restorecat/:id',session.verifyLoginAdmin,adminControllers.restorecat)
+router.post('/category/edit/:id',session.verifyLoginAdmin,adminControllers.editcat)
 router.get("/Log_out", adminControllers.doAdminLogout);
 
 module.exports = router;
