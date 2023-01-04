@@ -11,11 +11,12 @@ const bannerModel = require('../models/bannerSchema')
 const orderModel = require('../models/orderSchema');
 const couponModel = require('../models/couponSchema')
 const excelJs = require('exceljs')
+require('dotenv').config();
 
 // username & password of admin
-const adminUserName = "adminX";
-const adminPassword = "adminx123";
-//
+const adminUserName = process.env.ADMINID;
+const adminPassword = process.env.ADMINPASSWORD;
+
 
 
 
@@ -78,10 +79,13 @@ module.exports = {
     }
   },
   toAdminSignin: (req, res) => {
+    console.log(process.env.ADMINID,process.env.ADMINPASSWORD)
     if (
-      req.body.username === adminUserName &&
-      req.body.password === adminPassword
+      req.body.username === process.env.ADMINID &&
+      req.body.password === process.env.ADMINPASSWORD
+     
     ) {
+
       req.session.admin = req.body.email;
       req.session.loggedIn = true;
       res.redirect("/admin/dashboard");
