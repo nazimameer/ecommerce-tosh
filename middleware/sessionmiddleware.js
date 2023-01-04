@@ -17,7 +17,6 @@ module.exports = {
         const userid = mongoose.Types.ObjectId(id)
         const userDoc = await userModel.findOne({ _id: userid });
 
-        console.log(userDoc.blockStatus)
         if(req.session.user && userDoc.blockStatus==false){
             next()
         }else{

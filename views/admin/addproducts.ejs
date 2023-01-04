@@ -29,6 +29,17 @@
                             <input type="number" id="stock" name="stock" class="form-control mt-4" placeholder="Stock">
                             <p id="stockError" style="color: white;"></p>
 
+                            <label for="cats" style="color: white;">Select Category</label>
+                            <div class="dropdown">
+                                <select name="cats" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+                                <span class="caret"></span>
+                                <ul class="dropdown-menu">
+                                    <%cats.forEach((cat)=>{%> 
+                                        <option value="<%=cat.name%>"><%=cat.name%></option>
+                                        <%})%>  
+                       
+                            </select>
+                              </div>                          
                             <!-- file upload -->
 
                                 <div class="mb-3">
@@ -47,7 +58,7 @@
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
             <script src="/js/adminsidevalidation.js"></script>
-
+           
 </body>
 
 </html>

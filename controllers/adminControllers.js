@@ -62,7 +62,7 @@ module.exports = {
   
     
   
-      res.render("admin/dashboard", { admin: true, deliveredOrders:0, shippedOrders:0, pendingOrders:0, confirmOrders:0, cancelOrders:0,orders:0,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
+      res.render("admin/dashboard",{ admin: true, deliveredOrders:0, shippedOrders:0, pendingOrders:0, confirmOrders:0, cancelOrders:0,orders:0,orderpers:0,totalsale:0,salespers:0,revenue:0,revenuepers:0,cost:0,costpers:0 });
     
     }catch(err){
       console.log(err)
@@ -129,8 +129,9 @@ module.exports = {
       console.log("error");
     }
   },
-  viewAddProduct: (req, res) => {
-    res.render("admin/addproducts",{ msg:"" });
+  viewAddProduct: async(req, res) => {
+    const cats = await categoryModel.find({})
+    res.render("admin/addproducts",{ msg:"",cats });
   },
 
   goToEditProduct: (req, res) => {
@@ -191,15 +192,18 @@ module.exports = {
   AddProduct: async (req, res) => {
     const proname = req.body.name;
     const proExist = await productModel.findOne({ name:proname })
+    const category = req.body.cats;
+    console.log(category)
+    const cats = await categoryModel.find({ blockStatus:false })
     if(proExist){
-    res.render("admin/addproducts",{ msg:"product already exist" });
+    res.render("admin/addproducts",{ msg:"product already exist",cats });
 
     }else{
-       
-      const addPro = await productModel.create({
+        const addPro = await productModel.create({
         name: req.body.name,
         price: req.body.price,
         stock: req.body.stock,
+        category: category, 
       });
       const proImage = req.files.image;
       const proImageName = addPro._id;
@@ -464,8 +468,20 @@ editcat:async(req,res)=>{
 deletecat:async(req,res)=>{
   const id = req.params.id;
   const objId = mongoose.Types.ObjectId(id)
-  const addcat = await categoryModel.deleteOne({ _id: objId });
+  const addcat = await categoryModel.findOneAndUpdate({ _id: objId },{$set:{ blockStatus:true }});
+  const catname = addcat.name;
+  const catpro = await productModel.updateMany({ category:catname },{$set:{ blockStatus:true } })
+  console.log(catpro)
   res.redirect('/admin/category_details')
+},
+restorecat:async(req,res)=>{
+  const id = req.params.id;
+  const objId = mongoose.Types.ObjectId(id)
+  const restocat = await categoryModel.findOneAndUpdate({_id:objId},{$set:{ blockStatus:false }})
+  const catname = restocat.name;
+  const catpro = await productModel.updateMany({ category:catname },{$set:{ blockStatus:false}})
+  res.redirect('/admin/category_details')
+
 },
 downloadExcel:async(req,res)=>{
   const date = req.body;

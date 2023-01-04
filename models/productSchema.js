@@ -10,11 +10,13 @@ const productSchema = new mongoose.Schema({
   stock: {
     type: Number,
   },
+  category:{
+    type:String,
+  },
   blockStatus: {
      type: Boolean, 
      default: false 
-    },
-
+  },
 });
 
 module.exports = mongoose.model("products", productSchema);

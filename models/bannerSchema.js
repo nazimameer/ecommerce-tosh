@@ -4,11 +4,9 @@ const bannerSchema = new mongoose.Schema({
 
     bannername:{
         type:String,
-        required:true
     },
     text:{
         type:String,
-        required:true,
     },
     blockStatus: {
         type: Boolean,

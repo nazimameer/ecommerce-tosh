@@ -44,6 +44,7 @@ router.get('/editcoupon/:id',adminControllers.toeditcoupon)
 router.post("/downloadExcel",adminControllers.downloadExcel)
 router.get('/editcat/:id',adminControllers.editcategory);
 router.get('/deletecat/:id',adminControllers.deletecat)
+router.get('/restorecat/:id',adminControllers.restorecat)
 router.post('/category/edit/:id',adminControllers.editcat)
 router.get("/Log_out", adminControllers.doAdminLogout);
 

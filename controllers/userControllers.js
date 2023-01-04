@@ -822,12 +822,12 @@ toMyorders:async(req,res)=>{
   const order = await orderModel.find({userId:id,status:"Placed"})
   const cartcount = await cartnum(id)
   const orders = order.reverse()
-  
+   
  
   res.render('user/myorders',{ cartcount, orders,USERIN:true })
 },  
 cancelOrder:async(req,res)=>{ 
-  const data = req.body;
+  const data = req.body; 
   const id = data.orderId;
   const orderId = mongoose.Types.ObjectId(id);
    
@@ -877,7 +877,9 @@ orderedPro:async(req,res)=>{
 
   const user = req.session.user
       const cartcount = await cartnum(user)
-  res.render('user/orderedpro',{ products, cartcount,USERIN:true })
+  const address = await orderModel.findOne({ _id:orderId})
+
+  res.render('user/orderedpro',{ products, cartcount,USERIN:true,address })
   
 },    
 addtowishlist:async(req,res)=>{
