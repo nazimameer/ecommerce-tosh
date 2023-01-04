@@ -48,10 +48,10 @@ router.get('/myorders',sessionmiddleware.verifyLoginUser,userControllers.toMyord
 router.post('/cancelOrder',sessionmiddleware.verifyLoginUser,userControllers.cancelOrder)
 router.post('/varify-payment',sessionmiddleware.verifyLoginUser,userControllers.varifyPayment)
 router.get('/orderedpro/:id',sessionmiddleware.verifyLoginUser,userControllers.orderedPro)
-router.post('/addtowishlist',userControllers.addtowishlist)
+router.post('/addtowishlist',sessionmiddleware.verifyLoginUser,userControllers.addtowishlist)
 router.get('/wishlist',sessionmiddleware.verifyLoginUser,userControllers.towishlist)
 router.post('/removewish',sessionmiddleware.verifyLoginUser,userControllers.removewish)
-router.get("/user/log_out"  , userControllers.doUserLogout);
+router.get("/user/log_out",userControllers.doUserLogout);
 
 module.exports = router;  
    
