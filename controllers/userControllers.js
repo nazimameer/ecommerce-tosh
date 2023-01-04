@@ -523,16 +523,30 @@ module.exports = {
   productzoom: async (req, res) => {
     try {
       const id = req.session.user;
-      const userid = mongoose.Types.ObjectId(id);
-      const productId = req.params.id;
-      const objId = mongoose.Types.ObjectId(productId);
-      const zproduct = await productModel.findOne({ _id: req.params.id });
-      const wishlist = await wishlistModel.findOne({
-        userId: userid,
-        products: { $elemMatch: { productId: objId } },
-      });
-      const cartcount = await cartnum(id);
-      res.render("user/zoomproduct", { zproduct, cartcount, wishlist });
+      if(id){
+
+        const userid = mongoose.Types.ObjectId(id);
+        const productId = req.params.id;
+        const objId = mongoose.Types.ObjectId(productId);
+        const zproduct = await productModel.findOne({ _id: req.params.id });
+        const wishlist = await wishlistModel.findOne({
+          userId: userid,
+          products: { $elemMatch: { productId: objId } },
+        });
+        const cartcount = await cartnum(id);
+        res.render("user/zoomproduct", { zproduct, cartcount, wishlist,USERIN:true });
+      }else{
+        const userid = mongoose.Types.ObjectId(id);
+        const productId = req.params.id;
+        const objId = mongoose.Types.ObjectId(productId);
+        const zproduct = await productModel.findOne({ _id: req.params.id });
+        const wishlist = await wishlistModel.findOne({
+          userId: userid,
+          products: { $elemMatch: { productId: objId } },
+        });
+        const cartcount = await cartnum(id);
+        res.render("user/zoomproduct", { zproduct, cartcount, wishlist,USERIN:false });
+      }
     } catch (err) {
       console.log(err);
       res.render("user/404");
