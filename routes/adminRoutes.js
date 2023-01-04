@@ -7,7 +7,7 @@ const adminControllers = require("../controllers/adminControllers");
 
 
 
-router.get("/",session.verifyLoginAdmin,adminControllers.toAdminHome);
+router.get("/",adminControllers.toAdminHome); 
 router.post("/signin", adminControllers.toAdminSignin);
 router.get("/dashboard",session.verifyLoginAdmin,adminControllers.toAdminDash); 
 router.get("/user_details",session.verifyLoginAdmin, adminControllers.listUsers);

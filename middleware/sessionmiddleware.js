@@ -9,6 +9,7 @@ module.exports = {
         if(req.session.admin){
             next()
         }else{
+
             req.session.destroy();
             res.redirect('/admin');
         }
