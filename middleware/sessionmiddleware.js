@@ -21,7 +21,7 @@ module.exports = {
             next()
         }else{
             req.session.destroy();
-            res.redirect("/")
+            res.redirect("/log_in")
         }
     }
 } 
