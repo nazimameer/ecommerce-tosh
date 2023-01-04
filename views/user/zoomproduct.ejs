@@ -17,6 +17,16 @@
 </head>
 
 <body style="background: #000000">
+
+    <% if(USERIN==true){%>
+
+        <%- include('../partials/userheader.ejs') %>
+      
+          <%}else{%>
+      
+            <%- include('../partials/guestheader.ejs') %>
+      
+              <%}%>
   <%- include('../partials/userheader.ejs') %>
 
 
