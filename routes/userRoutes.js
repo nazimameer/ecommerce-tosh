@@ -31,7 +31,7 @@ router.post('/change_pro_q',sessionmiddleware.verifyLoginUser,userControllers.ch
 router.get('/cart/checkout',sessionmiddleware.verifyLoginUser,userControllers.toCheckOut)
 router.post('/addsecondary',sessionmiddleware.verifyLoginUser,userControllers.addAddresstodb)
 router.get('/addsecondary',sessionmiddleware.verifyLoginUser,userControllers.addAddress)
-router.get('/productinfo/:id',sessionmiddleware.verifyLoginUser,userControllers.productzoom);
+router.get('/productinfo/:id',userControllers.productzoom);
 router.post('/addToCart',sessionmiddleware.verifyLoginUser,userControllers.addToCart);
 router.get('/cart/delete_item/:id',sessionmiddleware.verifyLoginUser,userControllers.deleteInCart)
 router.post('/deletePro',sessionmiddleware.verifyLoginUser,userControllers.deleteInCart)
