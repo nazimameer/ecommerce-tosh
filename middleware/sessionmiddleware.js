@@ -2,7 +2,7 @@ const mongoose =require('mongoose')
 const userModel = require('../models/userSchema')
 
 
-
+ 
 
 module.exports = {
     verifyLoginAdmin:(req,res,next)=>{
@@ -12,7 +12,7 @@ module.exports = {
 
             req.session.destroy();
             res.redirect('/admin');
-        }
+        }      
     },
     verifyLoginUser:async(req,res,next)=>{
         const id = req.session.user

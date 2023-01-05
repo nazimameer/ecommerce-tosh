@@ -4,13 +4,14 @@ const productModel = require("../models/productSchema");
 const cartModel = require("../models/cartSchema");
 const categoryModel = require("../models/categorySchema");
 const addressModel = require("../models/addressSchema");
-const bannerModel = require("../models/bannerSchema");
-const mailer = require("../middleware/otp");
+const bannerModel = require("../models/bannerSchema"); 
+const mailer = require("../middleware/otp"); 
 const orderModel = require("../models/orderSchema");
 const Razorpay = require("razorpay");
 const couponModel = require("../models/couponSchema");
 const wishlistModel = require("../models/whishlist");
 const whishlist = require("../models/whishlist");
+const { group } = require("console");
 
 var instance = new Razorpay({
   key_id: "rzp_test_At7vVgtlG23Lyo",
@@ -128,7 +129,6 @@ function varifyPayment(details) {
 function cartnum(id) {
   return new Promise((resolve, reject) => {
     const user = id;
-    console.log("#id", id);
     const userId = mongoose.Types.ObjectId(user);
     cartModel
       .aggregate([
@@ -165,9 +165,7 @@ function cartnum(id) {
         },
       ])
       .then((Allcart) => {
-        console.log("#1:", Allcart.length);
         const length = Allcart.length;
-        console.log("@a", length);
         resolve(length);
       });
   });
@@ -183,7 +181,6 @@ module.exports = {
         const banners = await bannerModel.find({ blockStatus: false });
         const user = req.session.user;
         const cart = await cartnum(user);
-        console.log("$ja", cart);
         res.render("user/home", {
           products,
           cats,
@@ -322,7 +319,6 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            console.log("hai");
             res.render("user/newpassword", { msg: "", emailId: mail });
           }
         });
@@ -409,7 +405,6 @@ module.exports = {
       } else {
         cartcount = await Allcart.length;
       }
-      console.log(Allcart);
       let total = await subtotal(user);
       if (total[0]) {
         ship = 70;
@@ -420,6 +415,7 @@ module.exports = {
           grandTotal,
           cartcount,
           USERIN: true,
+          msg:""
         });
       } else {
         total = 0;
@@ -430,6 +426,7 @@ module.exports = {
           grandTotal,
           cartcount,
           USERIN: true,
+          msg:""
         });
       }
     } catch (err) {
@@ -498,7 +495,10 @@ module.exports = {
   },
   deleteInCart: async (req, res) => {
     try {
+      console.log('here')
       const data = req.body;
+      console.log(data)
+
       const objId = mongoose.Types.ObjectId(data.product);
       await cartModel
         .aggregate([
@@ -513,6 +513,8 @@ module.exports = {
           { $pull: { items: { productId: objId } } }
         )
         .then(() => {
+      console.log('here2')
+
           res.json({ status: true });
         });
     } catch (err) {
@@ -628,7 +630,14 @@ module.exports = {
           ])
           .then((total) => {
             ship = 70;
-            const grandTotal = total[0].total + ship;
+            let grandTotal;
+            if(total){
+              console.log("hai2")
+              grandTotal = total[0].total + ship;
+            }else{
+              console.log("hai5")
+              grandTotal =0 
+            }
             res.json({ status: true, total, grandTotal });
           });
       }
@@ -636,16 +645,106 @@ module.exports = {
       console.log(err);
       res.render("user/404");
     }
+  },     
+  checkstock:async(req,res)=>{
+    const user = req.session.user;
+    const userid = mongoose.Types.ObjectId(user)
+    
+
+    const cartitems = await cartModel.aggregate([
+      {
+        $match:{
+          userId:userid
+        }
+      },
+      {
+        $unwind:"$items"
+      },
+      {
+        $project:{
+          productItems: "$items.productId",
+          productQuantity: "$items.quantity"
+      }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "productItems",
+          foreignField: "_id",
+          as:"productDetails",
+        },
+      },
+      {
+        $project:{
+          productQuantity:1,
+          productDetails:{
+            $arrayElemAt:["$productDetails.stock",0]
+          } 
+        }
+      },
+    {
+      $project:{
+        productQuantity:{
+          $lte: ["$productQuantity","$productDetails"]
+        }
+      }
+    },
+    {
+       $match : { 
+        productQuantity : true 
+       }
+    },
+    { 
+      $group: { 
+        _id: null, count: 
+        { 
+          $sum: 1 
+        } 
+      } 
+    },
+    {
+      $project:{
+        _id:0,
+        count: 1
+      }
+    }
+    ])
+    const cart = await cartModel.aggregate([
+      {
+        $match:{
+        userId:userid 
+      }
+    },
+    {
+      $unwind: "$items"
+    }
+
+    ])
+    console.log(cartitems)
+    let cartitemscount;
+    if(cartitems.length===0){
+      cartitemscount=0;
+    }else{
+       cartitemscount = await cartitems[0].count;
+    }
+    const cartcount = cart.length;
+
+    if(cartitemscount==cartcount){
+      res.json({success:true})
+    }else{
+      res.json({success:false})
+    } 
   },
-  toCheckOut: async (req, res) => {
+  toCheckOut: async (req, res) => { 
     try {
+      console.log('ethitoo mo')
       const user = req.session.user;
       const total = await subtotal(user);
       const address = await addressModel.findOne({
         userId: user,
       });
       const cartcount = await cartnum(user);
-      if (total[0]) {
+      if (total[0]){
         ship = 70;
         const grandTotal = total[0].total + ship;
         res.render("user/checkout", {
@@ -848,12 +947,16 @@ module.exports = {
   },
   placeOrder: async (req, res) => {
     try {
+      console.log("nazim")
       const paymentmethod = req.body.paymentmethod;
       const total = req.body.totalprice;
       const totalprice = total * 100;
       const user = req.session.user;
+      const userid = mongoose.Types.ObjectId(user)
       const orderst =
         paymentmethod === "Cash on delivery" ? "Placed" : "PENDING";
+        console.log(orderst)
+        
       const addresstype = req.body.address;
       const address = await addressModel.findOne({ userId: user });
       const cart = await cartModel.findOne({ userId: user });
@@ -886,6 +989,7 @@ module.exports = {
       const orderId = order._id;
 
       if (paymentmethod === "Cash on delivery") {
+          await cartModel.deleteOne({ userId: userid})
         res.json({ success: true });
       } else if (paymentmethod === "onlinepayment") {
         generateRazorpay(orderId, totalprice).then((re) => {
@@ -990,6 +1094,8 @@ module.exports = {
   },
   varifyPayment: (req, res) => {
     try {
+      const id = req.session.user;
+      const user = mongoose.Types.ObjectId(id);
       const datas = req.body;
       varifyPayment(req.body)
         .then(async () => {
@@ -999,6 +1105,7 @@ module.exports = {
             { _id: orderId },
             { $set: { status: "Placed", orderstatus: "Placed" } }
           );
+          await cartModel.deleteOne({ userId: user})
           res.json({ status: true });
         })
         .catch((err) => {

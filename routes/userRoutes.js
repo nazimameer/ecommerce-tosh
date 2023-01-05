@@ -9,6 +9,7 @@ const bodyParser = require("body-parser");
 
 const userControllers = require("../controllers/userControllers");
 const { subtotal } = require("../controllers/userControllers");
+const { toCheckOut } = require("../controllers/userControllers");
 
 router.use(express());
 router.use(bodyParser.urlencoded({ extended: false })); 
@@ -28,6 +29,7 @@ router.post('/newpass',userControllers.newpass)
 router.get('/categorypage/:id',sessionmiddleware.verifyLoginUser,userControllers.categorypage)
 router.get("/cart",sessionmiddleware.verifyLoginUser,userControllers.viewCart);
 router.post('/change_pro_q',sessionmiddleware.verifyLoginUser,userControllers.changeProQuantity,subtotal) 
+router.post('/cart/checkout',sessionmiddleware.verifyLoginUser,userControllers.checkstock)
 router.get('/cart/checkout',sessionmiddleware.verifyLoginUser,userControllers.toCheckOut)
 router.post('/addsecondary',sessionmiddleware.verifyLoginUser,userControllers.addAddresstodb)
 router.get('/addsecondary',sessionmiddleware.verifyLoginUser,userControllers.addAddress)
