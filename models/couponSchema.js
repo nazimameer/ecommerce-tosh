@@ -8,7 +8,10 @@ const couponSchema = new Schema({
         CODE:{
             type:String,
         },
-        PRICE:{
+        PERCENTAGE:{
+            type:Number,
+        },
+        LIMIT:{
             type:Number,
         },
         EXPIRE:{

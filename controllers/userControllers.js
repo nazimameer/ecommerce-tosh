@@ -4,7 +4,7 @@ const productModel = require("../models/productSchema");
 const cartModel = require("../models/cartSchema");
 const categoryModel = require("../models/categorySchema");
 const addressModel = require("../models/addressSchema");
-const bannerModel = require("../models/bannerSchema"); 
+const bannerModel = require("../models/bannerSchema");
 const mailer = require("../middleware/otp"); 
 const orderModel = require("../models/orderSchema");
 const Razorpay = require("razorpay");
@@ -13,7 +13,7 @@ const wishlistModel = require("../models/whishlist");
 const whishlist = require("../models/whishlist");
 const { group } = require("console");
 
-var instance = new Razorpay({
+var instance = new Razorpay({ 
   key_id: "rzp_test_At7vVgtlG23Lyo",
   key_secret: "3hR36qbgrFTGG3FBHKV8b2iX",
 });
@@ -1006,11 +1006,14 @@ module.exports = {
       const data = req.body;
       const user = req.session.user;
       const userid = mongoose.Types.ObjectId(user);
-      const coupon = data.coupon;
+      const coup = data.coupon
+      const coupon = coup.toUpperCase();
       const grandTotal = data.grandTotal;
       const couponExist = await couponModel.findOne({ CODE: coupon });
-      const couponPrice = await couponExist.PRICE;
+      const couponPers = await couponExist.PERCENTAGE;
       const id = await couponExist._id;
+      const limit = couponExist.LIMIT;
+      console.log(limit)
       const couponid = mongoose.Types.ObjectId(id);
       if (couponExist) {
         const userExist = await couponModel.findOne({
@@ -1027,7 +1030,12 @@ module.exports = {
             { user: couponid },
             { userId: { $push: { _id: userid } } }
           );
-          const newtotal = grandTotal - couponPrice;
+          let pers = (couponPers/100)*grandTotal;
+            if(pers>limit){
+              pers = limit;
+            }
+          const newtotal = grandTotal - pers;
+          console.log(pers, newtotal)
           res.json({ success: true, newtotal });
         }
       } else {

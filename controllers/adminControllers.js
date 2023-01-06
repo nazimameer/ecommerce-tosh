@@ -411,18 +411,21 @@ res.render('admin/salesreport',{ orders, from,to,date })
 },
 addcoupon:async(req,res)=>{
     const data = req.body;
-    const code =data.CODE;
-    const codeExist = await couponModel.findOne({ CODE:code})
-    const price =data.PRICE;
-    const expire =data.EXPIRE; 
-    if(codeExist){
+    const code =data.code;
+    const codel = code.toUpperCase()
+    const codeExist = await couponModel.findOne({ CODE:codel})
+    const percentage =data.percentage;
+    const limit = data.limit;
+    const expire =data.expire; 
+    if(codeExist){ 
 
       res.render('admin/addcoupon',{ msg:"coupon already exist" })
       
     }else{
       await couponModel.create({
-        CODE:code,
-        PRICE:price,
+        CODE:codel,
+        PERCENTAGE:percentage, 
+        LIMIT:limit,
         EXPIRE:new Date(expire)
       })
       
