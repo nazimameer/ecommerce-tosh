@@ -43,12 +43,12 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex flex-row align-items-center">
                                                 <div>
-                                                    <img src="/ProductImg/<%=product?.productDetails?._id%>.jpg"
+                                                    <img src="/ProductImg/<%=product.productDetails._id%>.jpg"
                                                         class="img-fluid rounded-3" alt="Shopping item"
                                                         style="width: 65px;">
                                                 </div>
                                                 <div class="ms-3 ">
-                                                    <h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><%= product?.productDetails?.name %></h5>
+                                                    <h5 style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;"><%= product.productDetails.name %></h5>
                                                     <p class="small mb-0">
                                                         <!-- category -->
                                                     </p>
@@ -57,12 +57,12 @@
                                             <div class="d-flex flex-row align-items-center justify-content-center pe-3 ">
                                                 <div style="width: 50px;" class=" d-flex align-items-center justify-content-center pe-5 ">
 
-                                                    <p  class=" mb-0 d-flex align-items-center justify-content-center pe-2"><span style="font-size: 14px; font-weight: 900;">Q: </span><%= product?.productQuantity %></p>
+                                                    <p  class=" mb-0 d-flex align-items-center justify-content-center pe-2"><span style="font-size: 14px; font-weight: 900;">Q: </span><%= product.productQuantity %></p>
 
                                                 </div>
                                                 <div style="width: 80px;" class=" d-flex align-items-center justify-content-center pe-3 flex-wrap">
 
-                                                    <h5 class="mb-0" style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;">₹<%= product?.productDetails?.price %>.00</h5>
+                                                    <h5 class="mb-0" style="font-size: 18px; font-family: 'Poppins', sans-serif; font-weight: 700;">₹<%= product.productDetails.price %>.00</h5>
 
                                                 </div>
                                             </div>
