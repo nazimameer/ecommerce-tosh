@@ -3,12 +3,13 @@ const path = require('path');
 const express = require('express');
 const sessions = require('express-session');
 const fileUpload =require('express-fileupload')
-
+const dotenv = require('dotenv');
+dotenv.config()
 const app = express();
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
-  secret: 'keyvenomonoose',
+  secret: process.env.SECRET,
   saveUninitialized: true,
   cookie: { maxAge: oneDay },
   resave: false,
