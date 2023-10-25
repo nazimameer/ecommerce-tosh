@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const url = process.env.MONGODB;
+
 function dbConnect() {
   mongoose.set("strictQuery", false);
   mongoose
@@ -8,4 +9,5 @@ function dbConnect() {
     .then(() => console.log("database connected"))
     .catch((err) => console.log(err));
 }
-export default dbConnect;
+
+module.exports = dbConnect;
