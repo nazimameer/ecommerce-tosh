@@ -9,11 +9,16 @@ const app = express();
 
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
+  store: MongoStore.create({
+    mongoUrl:
+      "mongodb+srv://nazimameerpp:X1TtXHiHmPVGwCcM@cluster0.qn8ohjq.mongodb.net/?retryWrites=true&w=majority",
+  }),
   secret: process.env.SECRET,
   saveUninitialized: true,
   cookie: { maxAge: oneDay },
   resave: false,
 }));
+
 // cache
 app.use((req, res, next) => {
   res.set(
