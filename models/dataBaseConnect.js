@@ -1,10 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-mongoose
-  .connect(process.env.DBURI)
-  .then(() => {
-    console.log("connected");
-  })
-  .catch((err) => {
-    if (err) console.log("not connected");
-  });
+const url = process.env.MONGODB;
+function dbConnect() {
+  mongoose.set("strictQuery", false);
+  mongoose
+    .connect(url)
+    .then(() => console.log("database connected"))
+    .catch((err) => console.log(err));
+}
+export default dbConnect;
