@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const url = process.env.MONGODB;
-
-function dbConnect() {
-  mongoose.set("strictQuery", false);
-  mongoose
-    .connect(url)
-    .then(() => console.log("database connected"))
-    .catch((err) => console.log(err));
-}
-
-module.exports = dbConnect;
+mongoose
+  .connect(process.env.MONGODB,{
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("connected");
+  })
+  .catch((err) => {
+    if (err) console.log("not connected");
+  });
